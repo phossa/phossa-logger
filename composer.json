@@ -1,0 +1,26 @@
+{
+    "name": "phossa/phossa-logger",
+    "version": "1.0.0",
+    "license": "MIT",
+    "type": "library",
+    "description": "The logging package of Phossa framework",
+    "keywords": ["phossa", "framework", "logging"],
+    "homepage": "https://github.com/phossa/phossa-logger",
+    "authors": [
+        {
+            "name": "Hong Zhang",
+            "homepage": "https://github.com/phossa"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Phossa\\Logger\\": "src/" }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "phossa-shared": "~1.*",
+        "psr/logger": "*"
+    },
+    "archive": {
+        "exclude": ["!vendor", "tests", "*phpunit.xml",  "composer.lock"]
+    }
+}
