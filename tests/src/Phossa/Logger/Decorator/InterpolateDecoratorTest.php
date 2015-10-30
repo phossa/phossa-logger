@@ -35,14 +35,43 @@ class InterpolateDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $log = new \Phossa\Logger\LogEntry(
             \Phossa\Logger\LogLevel::INFO,
-            'test {bingo}',
-            array('bingo' => 'bingo2')
+            '{test} {bingo}',
+            array('bingo' => '{bingo2}')
         );
         $log2 = call_user_func($this->object, $log);
-        $this->assertEquals('test bingo2', $log2->getMessage());
+        $this->assertEquals('{test} {bingo2}', $log2->getMessage());
 
-        $log2->setContext('bingo', 2);
+        $log2->setContext('bingo2', 2);
         $log3 = call_user_func($this->object, $log2);
-        $this->assertEquals('test 2', $log3->getMessage());
+        $this->assertEquals('{test} 2', $log3->getMessage());
+
+        $log3->setContext('test', true);
+        $log4 = call_user_func($this->object, $log3);
+        $this->assertEquals('1 2', $log4->getMessage());
+    }
+
+    /**
+     * @covers Phossa\Logger\Decorator\InterpolateDecorator::__invoke
+     */
+    public function testInvokeObject()
+    {
+        $log = new \Phossa\Logger\LogEntry(
+            \Phossa\Logger\LogLevel::INFO,
+            '{test} {bingo}',
+            array('bingo' => $this)
+        );
+
+        $log2 = call_user_func($this->object, $log);
+        $this->assertEquals(
+            '{test} OBJECT: Phossa\Logger\Decorator\InterpolateDecoratorTest',
+            $log2->getMessage()
+        );
+
+        $log2->setContext('test', new \Exception('test'));
+        $log3 = call_user_func($this->object, $log2);
+        $this->assertEquals(
+            'EXCEPTION: test OBJECT: Phossa\Logger\Decorator\InterpolateDecoratorTest',
+            $log3->getMessage()
+        );
     }
 }

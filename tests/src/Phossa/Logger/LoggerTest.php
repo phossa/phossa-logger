@@ -17,7 +17,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Logger;
+        $this->object = new Logger();
     }
 
     /**
@@ -30,61 +30,91 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Phossa\Logger\Logger::setHandlers
-     * @todo   Implement testSetHandlers().
      */
     public function testSetHandlers()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        // callable
+        $handlers = [
+            new Handler\StreamHandler('test', LogLevel::ERROR),
+            function($log) {
+                return $log;
+            }
+        ];
+        $this->object->setHandlers($handlers);
+        $this->assertEquals(2, count($this->object->getHandlers()));
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::setHandlers
+     * @expectedExceptionCode Phossa\Logger\Message\Message::WRONG_LOG_HANDLER
+     * @expectedException Phossa\Logger\Exception\InvalidArgumentException
+     */
+    public function testSetHandlers2()
+    {
+        // not callable
+        $handlers = [
+            'bingo'
+        ];
+        $this->object->setHandlers($handlers);
     }
 
     /**
      * @covers Phossa\Logger\Logger::getHandlers
-     * @todo   Implement testGetHandlers().
      */
     public function testGetHandlers()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        // get default handler
+        $ha = $this->object->getHandlers();
+
+        $this->assertInstanceOf('Phossa\Logger\Handler\StreamHandler', $ha[0]);
     }
 
     /**
      * @covers Phossa\Logger\Logger::setDecorators
-     * @todo   Implement testSetDecorators().
      */
     public function testSetDecorators()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $decos = [
+            new Decorator\InterpolateDecorator(),
+            function($log) {
+                return $log;
+            }
+        ];
+        $this->object->setDecorators($decos);
+        $this->assertEquals(2, count($this->object->getDecorators()));
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::setHandlers
+     * @expectedExceptionCode Phossa\Logger\Message\Message::WRONG_LOG_DECORATOR
+     * @expectedException Phossa\Logger\Exception\InvalidArgumentException
+     */
+    public function testSetDecorators2()
+    {
+        // not callable
+        $decos = [
+            'bingo'
+        ];
+        $this->object->setDecorators($decos);
     }
 
     /**
      * @covers Phossa\Logger\Logger::getDecorators
-     * @todo   Implement testGetDecorators().
      */
     public function testGetDecorators()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        // get default decorator
+        $da = $this->object->getDecorators();
+
+        $this->assertInstanceOf('Phossa\Logger\Decorator\InterpolateDecorator', $da[0]);
     }
 
     /**
      * @covers Phossa\Logger\Logger::log
-     * @todo   Implement testLog().
+     * @todo not ready yet
      */
     public function testLog()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->object->log(LogLevel::ERROR, 'test {bingo}', ['bingo' => 'wow']);
     }
 }

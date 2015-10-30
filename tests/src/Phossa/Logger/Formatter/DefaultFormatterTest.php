@@ -30,13 +30,15 @@ class DefaultFormatterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Phossa\Logger\Formatter\DefaultFormatter::__invoke
-     * @todo   Implement test__invoke().
      */
-    public function test__invoke()
+    public function testInvoke()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
+        $log = new \Phossa\Logger\LogEntry(
+            \Phossa\Logger\LogLevel::INFO,
+            'test test'
         );
+
+        $msg = call_user_func($this->object, $log);
+        $this->assertContains('[INFO]: test test', $msg);
     }
 }

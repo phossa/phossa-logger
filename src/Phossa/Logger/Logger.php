@@ -74,12 +74,12 @@ class Logger extends AbstractLogger implements LoggerInterface
         array $decorators = [],
         callable $factory = null
     ) {
-        // add handlers
-        if ($handlers) $this->setHandlers($handlers);
+        // set decorators
+        $this->setDecorators($decorators);
 
-        // add decorators
-        if ($decorators) $this->setDecorators($decorators);
-
+        // set handlers
+        $this->setHandlers($handlers);
+        
         // log entry factory if any
         if ($factory) $this->factory = $factory;
     }
