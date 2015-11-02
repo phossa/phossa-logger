@@ -17,6 +17,7 @@ use Phossa\Logger\LogEntryInterface;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\Decorator\DecoratorInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -24,7 +25,8 @@ class InterpolateDecorator implements DecoratorInterface
 {
     /**
      * {@inheritDoc}
-     * 
+     *
+     * @see     http://www.php-fig.org/psr/psr-3/
      * Interpolates '{placeholder}' into text according to context array
      */
     public function __invoke(LogEntryInterface $log)/*# : LogEntryInterface */

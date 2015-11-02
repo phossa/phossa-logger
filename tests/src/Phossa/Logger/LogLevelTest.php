@@ -27,7 +27,6 @@ class LogLevelTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLevelCode1()
     {
-        $this->assertEquals(0, LogLevel::getLevelCode(''));
         $this->assertEquals(10, LogLevel::getLevelCode(Loglevel::DEBUG));
         $this->assertEquals(20, LogLevel::getLevelCode(Loglevel::INFO));
         $this->assertEquals(30, LogLevel::getLevelCode(Loglevel::NOTICE));
@@ -40,7 +39,7 @@ class LogLevelTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Phossa\Logger\LogLevel::getLevelCode
-     * @expectedExceptionCode Phossa\Logger\Message\Message::WRONG_LOG_LEVEL
+     * @expectedExceptionCode Phossa\Logger\Message\Message::INVALID_LOG_LEVEL
      * @expectedException Phossa\Logger\Exception\InvalidArgumentException
      */
     public function testGetLevelCode2()

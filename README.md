@@ -25,4 +25,5 @@ with some changes, specially tailored for Phossa framework.
 1.0.0
 
 # Dependencies
-PHP >= 5.4.0 and Phossa-shared 1.*
+PHP >= 5.4.0
+phossa-shared >= 1.0.0

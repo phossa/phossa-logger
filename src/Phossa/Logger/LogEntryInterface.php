@@ -49,6 +49,8 @@ interface LogEntryInterface
      * @param  string $level string constant
      * @return LogEntryInterface $this
      * @access public
+     * @throws Exception\InvalidArgumentException if invalid level given
+     * @see    Phossa\Logger\LogLevel
      * @api
      */
     public function setLevel(
@@ -61,16 +63,18 @@ interface LogEntryInterface
      * @param  void
      * @return string
      * @access public
+     * @see    Phossa\Logger\LogLevel
      * @api
      */
     public function getLevel()/*# : string */;
 
     /**
-     * Set timestamp, default is current timestamp
+     * Set timestamp, default is current UNIX timestamp in float
      *
      * @param  float $timestamp UNIX time in float
      * @return LogEntryInterface $this
      * @access public
+     * @see    microtime()
      * @api
      */
     public function setTimestamp(
@@ -108,16 +112,6 @@ interface LogEntryInterface
     public function getContexts()/*# : array */;
 
     /**
-     * Merge with new context
-     *
-     * @param  array $context new context array to merge with
-     * @return LogEntryInterface $this
-     * @access public
-     * @api
-     */
-    public function mergeContexts(array $context);
-
-    /**
      * Set log specific context
      *
      * @param  string $name context name
@@ -142,34 +136,14 @@ interface LogEntryInterface
     public function getContext(/*# string */ $name);
 
     /**
-     * Set formatted string
-     *
-     * @param  string $formatted formatted message string
-     * @return LogEntryInterface $this
-     * @access public
-     * @api
-     */
-    public function setFormatted(/*# string */ $formatted)/*# : LogEntryInterface */;
-
-    /**
-     * Get formatted string
+     * Stop log entry cascade downwards
      *
      * @param  void
-     * @return mixed null or string
-     * @access public
-     * @api
-     */
-    public function getFormatted();
-
-    /**
-     * Set log entry cascade downwards
-     *
-     * @param  bool $stop stop bubbling
      * @return void
      * @access public
      * @api
      */
-    public function stopCascading(/*# bool */ $stop = true);
+    public function stopCascading();
 
     /**
      * Get current cascading status

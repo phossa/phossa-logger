@@ -18,6 +18,9 @@ use Phossa\Logger\Formatter;
  * @abstract
  * @package \Phossa\Shared
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\Handler\HandlerInterface
+ * @see     Phossa\Logger\Handler\HandlerTrait
+ * @see     Phossa\Logger\Formatter\FormatterCapableTrait
  * @version 1.0.0
  * @since   1.0.0 added
  */

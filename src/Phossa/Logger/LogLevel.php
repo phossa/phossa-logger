@@ -45,10 +45,9 @@ class LogLevel extends PsrLogLevel
     ];
 
     /**
-     * Get level code by name, return 0 if $level not correct
+     * Get level code by name
      *
      * @param  string $level level name
-     * @param  bool $throwException throw exception instead of return 0
      * @return int
      * @access public
      * @throws Exception\InvalidArgumentException
@@ -57,23 +56,19 @@ class LogLevel extends PsrLogLevel
      * @api
      */
     public static function getLevelCode(
-        /*# string */ $level,
-        /*# bool */ $throwException = false
+        /*# string */ $level
     )/*# : int */ {
         if (is_string($level) &&
             isset(self::$levels[$level])) {
             return self::$levels[$level];
         }
 
-        if ($throwException) {
-            throw new Exception\InvalidArgumentException(
-                Message::get(
-                    Message::WRONG_LOG_LEVEL,
-                    (string) $level
-                ),
-                Message::WRONG_LOG_LEVEL
-            );
-        }
-        return 0;
+        throw new Exception\InvalidArgumentException(
+            Message::get(
+                Message::INVALID_LOG_LEVEL,
+                (string) $level
+            ),
+            Message::INVALID_LOG_LEVEL
+        );
     }
 }

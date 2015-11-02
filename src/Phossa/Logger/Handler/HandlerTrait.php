@@ -18,6 +18,7 @@ use Phossa\Logger\LogLevel;
  * @trait
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\Handler\HandlerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -35,13 +36,10 @@ trait HandlerTrait
     /**
      * {@inheritDoc}
      */
-    public function isHandling(/*# string */ $level = '')
+    public function isHandling(/*# string */ $level)/*# : bool */
     {
-        // $c = 0 if $level not recognized
-        $c = LogLevel::getLevelCode($level);
-
-        // return 0 if $level == ''
-        return $c < $this->level_code ? false : $this->level_code;
+        return LogLevel::getLevelCode($level) < $this->level_code ?
+            false : true;
     }
 
     /**
@@ -50,5 +48,13 @@ trait HandlerTrait
     public function setHandleLevel(/*# string */ $level)
     {
         $this->level_code = LogLevel::getLevelCode($level);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHandleLevelCode()/*# : int */
+    {
+        return $this->level_code;
     }
 }

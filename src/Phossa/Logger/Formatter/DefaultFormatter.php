@@ -17,6 +17,7 @@ use Phossa\Logger\LogEntryInterface;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\Formatter\FormatterInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -27,14 +28,11 @@ class DefaultFormatter implements FormatterInterface
      */
     public function __invoke(LogEntryInterface $log)/*# : string */
     {
-        $msg = sprintf(
+        return sprintf(
             '%s [%s]: %s',
             date('Y-m-d H:i:s', $log->getTimestamp()),
             strtoupper($log->getLevel()),
             $log->getMessage()
         );
-        $log->setFormatted($msg);
-
-        return $msg;
     }
 }

@@ -10,13 +10,12 @@
 
 namespace Phossa\Logger;
 
-use Phossa\Logger\Formatter\DefaultFormatter;
-
 /**
  * Log entry class
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\LogEntryInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -37,6 +36,7 @@ class LogEntry implements LogEntryInterface
      * @var    string
      * @type   string
      * @access protected
+     * @see    Phossa\Logger\LogLevel
      */
     protected $level;
 
@@ -59,15 +59,6 @@ class LogEntry implements LogEntryInterface
     protected $context;
 
     /**
-     * the formatted string
-     *
-     * @var    string
-     * @type   string
-     * @access protected
-     */
-    protected $formatted;
-
-    /**
      * Cascading status
      *
      * @var    bool
@@ -81,8 +72,9 @@ class LogEntry implements LogEntryInterface
      *
      * @param  string $level message level
      * @param  string $message message
-     * @param  array $contexts message context
+     * @param  array $contexts (optional) message context
      * @access public
+     * @throws Exception\InvalidArgumentException if invalid level given
      * @api
      */
     public function __construct(
@@ -119,7 +111,12 @@ class LogEntry implements LogEntryInterface
     public function setLevel(
         /*# string */ $level = LogLevel::INFO
     )/*# : LogEntryInterface */ {
+        // check level
+        LogLevel::getLevelCode($level);
+
+        // set level
         $this->level = $level;
+
         return $this;
     }
 
@@ -167,15 +164,6 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function mergeContexts(array $context)
-    {
-        $this->context = array_replace($this->context, $context);
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setContext(
         /*# string */ $name,
         $value
@@ -198,27 +186,9 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function setFormatted(
-        /*# string */ $formatted
-    )/*# : LogEntryInterface */ {
-        $this->formatted = (string) $formatted;
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFormatted()
+    public function stopCascading()
     {
-        return $this->formatted;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function stopCascading(/*# bool */ $stop = true)
-    {
-        $this->stopped = $stop;
+        $this->stopped = true;
     }
 
     /**
@@ -236,19 +206,9 @@ class LogEntry implements LogEntryInterface
 
     /**
      * To string.
-     *
-     * Check the 'formatted' context first, if not exits, call default
-     * formatter
      */
     public function __toString()
     {
-        // check previous formatted message
-        if ($this->getFormatted() === null) {
-            $formatter = new DefaultFormatter();
-            $msg = call_user_func($formatter, $this);
-            $this->setFormatted($msg);
-        }
-
-        return $this->getFormatted();
+        return $this->message;
     }
 }

@@ -35,7 +35,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         // callable
         $handlers = [
-            new Handler\StreamHandler('test', LogLevel::ERROR),
+            new Handler\SyslogHandler(LogLevel::ERROR, 'phossa-log'),
             function($log) {
                 return $log;
             }
@@ -46,7 +46,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Phossa\Logger\Logger::setHandlers
-     * @expectedExceptionCode Phossa\Logger\Message\Message::WRONG_LOG_HANDLER
+     * @expectedExceptionCode Phossa\Logger\Message\Message::INVALID_LOG_HANDLER
      * @expectedException Phossa\Logger\Exception\InvalidArgumentException
      */
     public function testSetHandlers2()
@@ -66,7 +66,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         // get default handler
         $ha = $this->object->getHandlers();
 
-        $this->assertInstanceOf('Phossa\Logger\Handler\StreamHandler', $ha[0]);
+        $this->assertInstanceOf('Phossa\Logger\Handler\SyslogHandler', $ha[0]);
     }
 
     /**
@@ -86,7 +86,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Phossa\Logger\Logger::setHandlers
-     * @expectedExceptionCode Phossa\Logger\Message\Message::WRONG_LOG_DECORATOR
+     * @expectedExceptionCode Phossa\Logger\Message\Message::INVALID_LOG_DECORATOR
      * @expectedException Phossa\Logger\Exception\InvalidArgumentException
      */
     public function testSetDecorators2()

@@ -16,6 +16,7 @@ namespace Phossa\Logger\Formatter;
  * @trait
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\Formatter\FormatterCapableInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */

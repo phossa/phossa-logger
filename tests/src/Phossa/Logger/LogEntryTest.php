@@ -93,22 +93,6 @@ class LogEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Phossa\Logger\LogEntry::mergeContexts
-     */
-    public function testMergeContexts()
-    {
-        $con1 = ['bingo' => 'bingo'];
-        $con2 = ['wow'   => 'wow'];
-        $this->object->mergeContexts($con1);
-        $this->assertEquals($con1, $this->object->getContexts());
-        $this->object->mergeContexts($con2);
-        $this->assertEquals(
-            ['bingo' => 'bingo', 'wow' => 'wow'],
-            $this->object->getContexts()
-        );
-    }
-
-    /**
      * @covers Phossa\Logger\LogEntry::setContext
      */
     public function testSetContext()
@@ -119,26 +103,6 @@ class LogEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Phossa\Logger\LogEntry::setFormatted
-     * @todo   Implement testSetFormatted().
-     */
-    public function testSetFormatted()
-    {
-        $this->object->setFormatted('bingo');
-        $this->assertEquals('bingo', $this->object->getFormatted());
-    }
-
-    /**
-     * @covers Phossa\Logger\LogEntry::getFormatted
-     */
-    public function testGetFormatted()
-    {
-        $this->assertEquals(null, $this->object->getFormatted());
-        $this->object->setFormatted('bingo');
-        $this->assertEquals('bingo', $this->object->getFormatted());
-    }
-
-    /**
      * @covers Phossa\Logger\LogEntry::stopCascading
      */
     public function testStopCascading()
@@ -146,8 +110,6 @@ class LogEntryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->object->isCascadingStopped());
         $this->object->stopCascading();
         $this->assertEquals(true, $this->object->isCascadingStopped());
-        $this->object->stopCascading(false);
-        $this->assertEquals(false, $this->object->isCascadingStopped());
     }
 
     /**

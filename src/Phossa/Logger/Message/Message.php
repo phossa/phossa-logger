@@ -23,32 +23,39 @@ use Phossa\Shared\Message\MessageAbstract;
 class Message extends MessageAbstract
 {
     /**#@+
+     * @var   int
      * @type  int
      */
 
     /**
-     * Wrong log level name
+     * Invalid level name "%s" found
      */
-    const WRONG_LOG_LEVEL       = 1510271320;
+    const INVALID_LOG_LEVEL     = 1510271320;
 
     /**
-     * Wrong log handler
+     * "%s" not a valid log handler
      */
-    const WRONG_LOG_HANDLER     = 1510271321;
+    const INVALID_LOG_HANDLER   = 1510271321;
 
     /**
-     * Wrong log handler
+     * "%s" not a valid log decorator
      */
-    const WRONG_LOG_DECORATOR   = 1510271322;
+    const INVALID_LOG_DECORATOR = 1510271322;
 
+    /**
+     * Invalid syslog ident "%s" facility "%s"
+     */
+    const INVALID_LOG_SYSLOG    = 1510271323;
+    
     /**#@-*/
 
     /**
      * {@inheritdoc}
      */
     protected static $messages = [
-        self::WRONG_LOG_LEVEL       => 'Wrong level name "%s" found',
-        self::WRONG_LOG_HANDLER     => '"%s" not a valid log handler',
-        self::WRONG_LOG_DECORATOR   => '"%s" not a valid log decorator',
+        self::INVALID_LOG_LEVEL     => 'Invalid level name "%s" found',
+        self::INVALID_LOG_HANDLER   => '"%s" not a valid log handler',
+        self::INVALID_LOG_DECORATOR => '"%s" not a valid log decorator',
+        self::INVALID_LOG_SYSLOG    => 'Invalid syslog ident "%s" facility "%s"',
     ];
 }

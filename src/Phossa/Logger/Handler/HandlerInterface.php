@@ -19,6 +19,7 @@ use Phossa\Logger\Formatter\FormatterCapableInterface;
  * @interface
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Logger\Formatter\FormatterCapableInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -31,12 +32,14 @@ interface HandlerInterface extends FormatterCapableInterface
      * handled by this handler
      *
      * @param  string $level log level
-     * @return mixed level code(int) or FALSE
+     * @return bool
+     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     *         if $level not right
      * @access public
      * @see    Phossa\Logger\LogLevel::getLevelCode
      * @api
      */
-    public function isHandling(/*# string */ $level = '');
+    public function isHandling(/*# string */ $level)/*# : bool */;
 
     /**
      * Set log level to handle for this handler
@@ -45,15 +48,28 @@ interface HandlerInterface extends FormatterCapableInterface
      *
      * @param  string $level level to handle
      * @return void
-     * @throws void
+     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     *         if $level not right
+     * @see    Phossa\Logger\LogLevel
      * @access public
      * @api
      */
     public function setHandleLevel(/*# string */ $level);
 
     /**
+     * Get current handling level code in int
+     *
+     * @param  void
+     * @return int
+     * @throws void
+     * @access public
+     * @api
+     */
+    public function getHandleLevelCode()/*# : int */;
+
+    /**
      * Make this callable
-     * 
+     *
      * class implementing this interface has to define the magic method
      * __invoke(), which takes a Phossa\Logger\LogEntryInterface object as
      * parameter and also return the same LogEntryInterface object

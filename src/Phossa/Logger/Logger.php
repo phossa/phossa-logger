@@ -79,7 +79,7 @@ class Logger extends AbstractLogger implements LoggerInterface
 
         // set handlers
         $this->setHandlers($handlers);
-        
+
         // log entry factory if any
         if ($factory) $this->factory = $factory;
     }
@@ -88,7 +88,7 @@ class Logger extends AbstractLogger implements LoggerInterface
      * Set logEntry handlers
      *
      * Handler can be instance of Handler\HandlerInterface or callable. If
-     * empty, set the default handler to Handler\StreamHandler
+     * empty, set the default handler to Handler\SyslogHandler
      *
      * @param  callable[] $handlers handle array
      * @return void
@@ -102,7 +102,7 @@ class Logger extends AbstractLogger implements LoggerInterface
         // default handler
         if (empty($handlers)) {
             $handlers = [
-                new Handler\StreamHandler('php://stderr', LogLevel::DEBUG)
+                new Handler\SyslogHandler(LogLevel::DEBUG, 'phossa-logger')
             ];
         }
 
@@ -113,18 +113,18 @@ class Logger extends AbstractLogger implements LoggerInterface
             if (!is_callable($handler)) {
                 throw new Exception\InvalidArgumentException(
                     Message::get(
-                        Message::WRONG_LOG_HANDLER,
+                        Message::INVALID_LOG_HANDLER,
                         is_object($handler) ?
                             get_class($handler) :
                             (string) $handler
                     ),
-                    Message::WRONG_LOG_HANDLER
+                    Message::INVALID_LOG_HANDLER
                 );
             }
 
             // update minimum level
             if ($handler instanceof Handler\HandlerInterface) {
-                $c = (int) $handler->isHandling();
+                $c = $handler->getHandleLevelCode();
                 if ($c > $this->level_code) $this->level_code = $c;
             }
         }
@@ -142,8 +142,7 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function getHandlers()/*# : array */
     {
-        if ($this->handlers) return $this->handlers;
-        return [];
+        return $this->handlers;
     }
 
     /**
@@ -171,12 +170,12 @@ class Logger extends AbstractLogger implements LoggerInterface
             if (!is_callable($deco)) {
                 throw new Exception\InvalidArgumentException(
                     Message::get(
-                        Message::WRONG_LOG_DECORATOR,
+                        Message::INVALID_LOG_DECORATOR,
                         is_object($deco) ?
                             get_class($deco) :
                             gettype($deco)
                     ),
-                    Message::WRONG_LOG_DECORATOR
+                    Message::INVALID_LOG_DECORATOR
                 );
             }
         }
@@ -194,8 +193,7 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function getDecorators()/*# : array */
     {
-        if ($this->decorators) return $this->decorators;
-        return [];
+        return $this->decorators;
     }
 
     /**
@@ -207,7 +205,7 @@ class Logger extends AbstractLogger implements LoggerInterface
     public function log($level, $message, array $context = array())
     {
         // check minimum level, Exception expected
-        $code = LogLevel::getLevelCode($level, true);
+        $code = LogLevel::getLevelCode($level);
         if ($code < $this->level_code) return;
 
         // create logEntry

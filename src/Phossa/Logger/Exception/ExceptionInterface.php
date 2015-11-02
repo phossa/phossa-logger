@@ -16,6 +16,7 @@ namespace Phossa\Logger\Exception;
  * @interface
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Shared\Exception\ExceptionInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */

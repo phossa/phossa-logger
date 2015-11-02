@@ -15,6 +15,7 @@ namespace Phossa\Logger\Exception;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Psr\Log\InvalidArgumentException
  * @version 1.0.0
  * @since   1.0.0 added
  */
