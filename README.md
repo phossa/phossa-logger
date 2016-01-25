@@ -50,9 +50,9 @@ composer require "phossa/phossa-logger=1.*"
 
 # Dependencies
 
-PHP >= 5.4.0
-phossa/phossa-shared >= 1.0.3
-psr/log
+- PHP >= 5.4.0
+- phossa/phossa-shared >= 1.0.3
+- psr/log
 
 # License
 
