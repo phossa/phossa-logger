@@ -11,22 +11,21 @@
 namespace Phossa\Logger\Formatter;
 
 /**
- * Simple implementation of FormatterCapableInterface
+ * Simple implementation of FormatterAwareInterface
  *
  * @trait
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Formatter\FormatterCapableInterface
+ * @see     \Phossa\Logger\Formatter\FormatterAwareInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
-trait FormatterCapableTrait
+trait FormatterAwareTrait
 {
     /**
      * formatter
      *
      * @var    callable
-     * @type   callable
      * @access protected
      */
     protected $formatter;

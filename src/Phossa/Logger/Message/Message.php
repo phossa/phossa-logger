@@ -17,6 +17,7 @@ use Phossa\Shared\Message\MessageAbstract;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     \Phossa\Shared\Message\MessageAbstract
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -24,7 +25,6 @@ class Message extends MessageAbstract
 {
     /**#@+
      * @var   int
-     * @type  int
      */
 
     /**
@@ -46,7 +46,12 @@ class Message extends MessageAbstract
      * Invalid syslog ident "%s" facility "%s"
      */
     const INVALID_LOG_SYSLOG    = 1510271323;
-    
+
+    /**
+     * Invalid stream "%s"
+     */
+    const INVALID_LOG_STREAM    = 1510271324;
+
     /**#@-*/
 
     /**
@@ -57,5 +62,6 @@ class Message extends MessageAbstract
         self::INVALID_LOG_HANDLER   => '"%s" not a valid log handler',
         self::INVALID_LOG_DECORATOR => '"%s" not a valid log decorator',
         self::INVALID_LOG_SYSLOG    => 'Invalid syslog ident "%s" facility "%s"',
+        self::INVALID_LOG_STREAM    => 'Invalid stream "%s"',
     ];
 }

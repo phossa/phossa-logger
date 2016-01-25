@@ -17,7 +17,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Logger();
+        $this->object = new Logger('mylog');
     }
 
     /**
@@ -64,6 +64,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testGetHandlers()
     {
         // get default handler
+        $this->object->info('test');
         $ha = $this->object->getHandlers();
 
         $this->assertInstanceOf('Phossa\Logger\Handler\SyslogHandler', $ha[0]);
@@ -104,6 +105,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testGetDecorators()
     {
         // get default decorator
+        $this->object->info('test');
         $da = $this->object->getDecorators();
 
         $this->assertInstanceOf('Phossa\Logger\Decorator\InterpolateDecorator', $da[0]);

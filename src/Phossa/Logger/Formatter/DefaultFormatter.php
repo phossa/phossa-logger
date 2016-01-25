@@ -13,26 +13,36 @@ namespace Phossa\Logger\Formatter;
 use Phossa\Logger\LogEntryInterface;
 
 /**
- * A very simple formatter
+ * A very simple formatter implementing FormatterInterface
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Formatter\FormatterInterface
+ * @see     \Phossa\Logger\Formatter\FormatterAbstract
  * @version 1.0.0
  * @since   1.0.0 added
+ * @since   1.0.1 extends FormatterAbstract
  */
-class DefaultFormatter implements FormatterInterface
+class DefaultFormatter extends FormatterAbstract
 {
+    /**
+     * default format
+     *
+     * @var    string
+     * @access protected
+     */
+    protected $format = '%datetime% [%level_name%]: %message%';
+
     /**
      * {@inheritDoc}
      */
     public function __invoke(LogEntryInterface $log)/*# : string */
     {
-        return sprintf(
-            '%s [%s]: %s',
-            date('Y-m-d H:i:s', $log->getTimestamp()),
-            strtoupper($log->getLevel()),
-            $log->getMessage()
-        );
+        $data = [
+            '%datetime%'    => date('Y-m-d H:i:s', $log->getTimestamp()),
+            '%level_name%'  => strtoupper($log->getLevel()),
+            '%message%'     => $log->getMessage()
+        ];
+        
+        return strtr($this->format, $data);
     }
 }

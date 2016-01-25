@@ -15,9 +15,9 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * Log decorator
  *
- * Normally, used to process the log, add context fields to the log etc.
- * Implementation has to make '__invoke()' concrete, thus the decorator
- * instance is a callable
+ * Normally, decorator is used to process the log, add context fields to the
+ * log etc. Implementation has to make '__invoke()' concrete, thus the
+ * decorator instance is a callable
  *
  * @interface
  * @package \Phossa\Logger

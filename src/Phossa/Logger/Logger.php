@@ -11,7 +11,6 @@
 namespace Phossa\Logger;
 
 use Psr\Log\AbstractLogger;
-use Psr\Log\LoggerInterface;
 use Phossa\Logger\Message\Message;
 
 /**
@@ -19,6 +18,8 @@ use Phossa\Logger\Message\Message;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     \Psr\Log\AbstractLogger
+ * @see     \Phossa\Logger\LoggerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -28,25 +29,22 @@ class Logger extends AbstractLogger implements LoggerInterface
      * log entry decorators
      *
      * @var    callable[]
-     * @type   callable[]
      * @access protected
      */
-    protected $decorators;
+    protected $decorators = [];
 
     /**
      * log entry handlers
      *
      * @var    callable[]
-     * @type   callable[]
      * @access protected
      */
-    protected $handlers;
+    protected $handlers   = [];
 
     /**
      * Log entry factory
      *
      * @var    callable
-     * @type   callable
      * @access protected
      */
     protected $factory;
@@ -55,25 +53,37 @@ class Logger extends AbstractLogger implements LoggerInterface
      * Minimum level code
      *
      * @var    int
-     * @type   int
      * @access protected
      */
     protected $level_code = 0;
 
     /**
+     * identification string
+     *
+     * @var    string
+     * @access protected
+     */
+    protected $ident;
+
+    /**
      * constructor
      *
-     * @param  array $handlers (optional) callable handler array
-     * @param  array $decorators (optional) callable decorator array
+     * @param  string $ident the logger identification string
+     * @param  callable[] $handlers (optional) callable handler array
+     * @param  callable[] $decorators (optional) callable decorator array
      * @param  callable $factory (optional) log factory callable
      * @throws Exception\InvalidArgumentException
      * @access public
      */
     public function __construct(
+        /*# string */ $ident,
         array $handlers   = [],
         array $decorators = [],
         callable $factory = null
     ) {
+        // set id
+        $this->ident = $ident;
+
         // set decorators
         $this->setDecorators($decorators);
 
@@ -85,60 +95,51 @@ class Logger extends AbstractLogger implements LoggerInterface
     }
 
     /**
-     * Set logEntry handlers
-     *
-     * Handler can be instance of Handler\HandlerInterface or callable. If
-     * empty, set the default handler to Handler\SyslogHandler
-     *
-     * @param  callable[] $handlers handle array
-     * @return void
-     * @throws Exception\InvalidArgumentException
-     *         if not the valid handler
-     * @access public
-     * @api
+     * {@inheritDoc}
      */
-    public function setHandlers(array $handlers)
-    {
-        // default handler
-        if (empty($handlers)) {
-            $handlers = [
-                new Handler\SyslogHandler(LogLevel::DEBUG, 'phossa-logger')
-            ];
-        }
+    public function setHandlers(
+        array $handlers,
+        /*# bool */ $flush = true
+    ) {
+        // flush handlers first
+        if ($flush) $this->handlers = [];
 
-        // check handlers
-        foreach($handlers as $handler) {
+        // add handlers one by one
+        if ($handlers) {
+            foreach($handlers as $handler) {
+                // is callable
+                if (!is_callable($handler)) {
+                    throw new Exception\InvalidArgumentException(
+                        Message::get(
+                            Message::INVALID_LOG_HANDLER,
+                            is_object($handler) ?
+                                get_class($handler) :
+                                (string) $handler
+                        ),
+                        Message::INVALID_LOG_HANDLER
+                    );
+                }
 
-            // is callable
-            if (!is_callable($handler)) {
-                throw new Exception\InvalidArgumentException(
-                    Message::get(
-                        Message::INVALID_LOG_HANDLER,
-                        is_object($handler) ?
-                            get_class($handler) :
-                            (string) $handler
-                    ),
-                    Message::INVALID_LOG_HANDLER
-                );
-            }
-
-            // update minimum level
-            if ($handler instanceof Handler\HandlerInterface) {
-                $c = $handler->getHandleLevelCode();
-                if ($c > $this->level_code) $this->level_code = $c;
+                // add handler
+                $this->addHandler($handler);
             }
         }
-
-        $this->handlers = $handlers;
     }
 
     /**
-     * Get logEntry handlers
-     *
-     * @param  void
-     * @return callable[]
-     * @access public
-     * @api
+     * {@inheritDoc}
+     */
+    public function addHandler(callable $handler)
+    {
+        if ($handler instanceof Handler\HandlerInterface) {
+            $c = $handler->getHandleLevelCode();
+            if ($c > $this->level_code) $this->level_code = $c;
+        }
+        $this->handlers[] = $handler;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getHandlers()/*# : array */
     {
@@ -146,50 +147,44 @@ class Logger extends AbstractLogger implements LoggerInterface
     }
 
     /**
-     * Set logEntry decorators
-     *
-     * If empty, set the default decorator to Decorator\InterpolateDecorator
-     *
-     * @param  callable[] $decorators decorator array
-     * @return void
-     * @throws Exception\InvalidArgumentException if not valid decorator
-     * @access public
-     * @api
+     * {@inheritDoc}
      */
-    public function setDecorators(array $decorators)
-    {
-        // default decorator
-        if (empty($decorators)) {
-            $decorators = [
-                new Decorator\InterpolateDecorator()
-            ];
-        }
+    public function setDecorators(
+        array $decorators,
+        /*# bool */ $flush = true
+    ) {
+        // flush decorators first
+        if ($flush) $this->decorators = [];
 
-        // check decorators
-        foreach($decorators as $deco) {
-            if (!is_callable($deco)) {
-                throw new Exception\InvalidArgumentException(
-                    Message::get(
-                        Message::INVALID_LOG_DECORATOR,
-                        is_object($deco) ?
-                            get_class($deco) :
-                            gettype($deco)
-                    ),
-                    Message::INVALID_LOG_DECORATOR
-                );
+        // add decorators one by one
+        if ($decorators) {
+            foreach($decorators as $deco) {
+                if (!is_callable($deco)) {
+                    throw new Exception\InvalidArgumentException(
+                        Message::get(
+                            Message::INVALID_LOG_DECORATOR,
+                            is_object($deco) ?
+                                get_class($deco) :
+                                gettype($deco)
+                        ),
+                        Message::INVALID_LOG_DECORATOR
+                    );
+                }
+                $this->addDecorator($deco);
             }
         }
-
-        $this->decorators = $decorators;
     }
 
     /**
-     * Get logEntry decorators
-     *
-     * @param  void
-     * @return callable[]
-     * @access public
-     * @api
+     * {@inheritDoc}
+     */
+    public function addDecorator(callable $decorator)
+    {
+        $this->decorators[] = $decorator;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getDecorators()/*# : array */
     {
@@ -216,9 +211,22 @@ class Logger extends AbstractLogger implements LoggerInterface
             $log = new LogEntry($level, (string) $message, $context);
         }
 
+        // set default decorator if empty
+        if (empty($this->decorators)) {
+            $this->addDecorator(new Decorator\InterpolateDecorator());
+        }
+
         // loop thru decorators
         foreach ($this->decorators as $deco) {
             $log = call_user_func($deco, $log);
+        }
+
+        // set default syslog if empty
+        if (empty($this->handlers)) {
+            $this->addHandler(new Handler\SyslogHandler(
+                LogLevel::NOTICE,
+                $this->ident
+            ));
         }
 
         // loop thru handlers

@@ -18,6 +18,7 @@ use Phossa\Logger\Message\Message;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     \Psr\Log\LogLevel
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -29,7 +30,6 @@ class LogLevel extends PsrLogLevel
      * log level mappings
      *
      * @var     array
-     * @type    array
      * @access  protected
      * @static
      */

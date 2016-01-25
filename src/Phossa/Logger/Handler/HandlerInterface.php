@@ -11,7 +11,6 @@
 namespace Phossa\Logger\Handler;
 
 use Phossa\Logger\LogEntryInterface;
-use Phossa\Logger\Formatter\FormatterCapableInterface;
 
 /**
  * HandlerInterface
@@ -19,24 +18,20 @@ use Phossa\Logger\Formatter\FormatterCapableInterface;
  * @interface
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Formatter\FormatterCapableInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
-interface HandlerInterface extends FormatterCapableInterface
+interface HandlerInterface
 {
     /**
      * Is handling this log level ?
-     *
-     * if argument $level is empty string, returns the level code currently
-     * handled by this handler
      *
      * @param  string $level log level
      * @return bool
      * @throws Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right
      * @access public
-     * @see    Phossa\Logger\LogLevel::getLevelCode
+     * @see    \Phossa\Logger\LogLevel::getLevelCode
      * @api
      */
     public function isHandling(/*# string */ $level)/*# : bool */;
@@ -48,9 +43,9 @@ interface HandlerInterface extends FormatterCapableInterface
      *
      * @param  string $level level to handle
      * @return void
-     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right
-     * @see    Phossa\Logger\LogLevel
+     * @see    \Phossa\Logger\LogLevel
      * @access public
      * @api
      */
@@ -71,8 +66,8 @@ interface HandlerInterface extends FormatterCapableInterface
      * Make this callable
      *
      * class implementing this interface has to define the magic method
-     * __invoke(), which takes a Phossa\Logger\LogEntryInterface object as
-     * parameter and also return the same LogEntryInterface object
+     * __invoke(), which takes a \Phossa\Logger\LogEntryInterface object
+     * as parameter and also return the same LogEntryInterface object
      *
      * @param  LogEntryInterface $log the log entry
      * @return LogEntryInterface

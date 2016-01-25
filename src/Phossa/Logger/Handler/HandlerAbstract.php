@@ -16,16 +16,27 @@ use Phossa\Logger\Formatter;
  * Abstract handler
  *
  * @abstract
- * @package \Phossa\Shared
+ * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Handler\HandlerInterface
- * @see     Phossa\Logger\Handler\HandlerTrait
- * @see     Phossa\Logger\Formatter\FormatterCapableTrait
+ * @see     \Phossa\Logger\Handler\HandlerInterface
+ * @see     \Phossa\Logger\Handler\HandlerTrait
+ * @see     \Phossa\Logger\Formatter\FormatterAwareInterface
+ * @see     \Phossa\Logger\Formatter\FormatterAwareTrait
  * @version 1.0.0
  * @since   1.0.0 added
  */
-abstract class HandlerAbstract implements HandlerInterface
+abstract class HandlerAbstract implements
+    HandlerInterface, Formatter\FormatterAwareInterface
 {
     use HandlerTrait,
-        Formatter\FormatterCapableTrait;
+        Formatter\FormatterAwareTrait,
+        \Phossa\Shared\Pattern\SetPropertiesTrait;
+
+    /**
+     * stop cascading
+     *
+     * @var    bool
+     * @access protected
+     */
+    protected $stop = false;
 }

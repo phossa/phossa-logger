@@ -1,15 +1,38 @@
 # Introduction
-Phossa is a lightweight PHP framework. Phossa-logger is a rewrite of Monolog,
-with some changes, specially tailored for Phossa framework.
+
+Phossa-logger is a PSR-3 compliant logging package. It is a rewrite of Monolog
+with some changes.
+
+More information about [PSR-3](http://www.php-fig.org/psr/psr-3/)
+
+# Installation
+
+Install via the `composer` utility.
+
+```
+composer require "phossa/phossa-logger=1.*"
+```
+
+# Usage
+
+- The simplest usage
+
+    ```php
+    // create the logger with id 'mylogger'
+    $logger = new \Phossa\Logger\Logger('mylogger');
+
+    // logger will set default syslog and interpolate decorator
+    $logger->notice('a notice from {whom}', array('whom' => $cache));
+    ```
 
 # Features
 
-- Created LogEntryInterface for log entry (or call it message). It is now
+- Decorator: decorate log entry in some way
+
+- Created `LogEntryInterface` for log entry (or call it message). It is now
   possible to extend `LogEntry` and use a factory closure to create log entry.
 
 - Handler: distribute log entry to different devices
-
-- Decorator: decorate log entry in some way
 
 - Formatter: turn log entry object into string
 
@@ -22,8 +45,15 @@ with some changes, specially tailored for Phossa framework.
 - PHP7 ready for return type declarations and argument type declarations.
 
 # Version
-1.0.0
+
+1.0.1
 
 # Dependencies
+
 PHP >= 5.4.0
-phossa-shared >= 1.0.0
+phossa/phossa-shared >= 1.0.3
+psr/log
+
+# License
+
+[MIT License](http://spdx.org/licenses/MIT)

@@ -18,7 +18,7 @@ use Phossa\Logger\LogLevel;
  * @trait
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Handler\HandlerInterface
+ * @see     \Phossa\Logger\Handler\HandlerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -28,7 +28,6 @@ trait HandlerTrait
      * level code to handle
      *
      * @var    int
-     * @type   int
      * @access protected
      */
     protected $level_code = 0;

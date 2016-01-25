@@ -11,7 +11,7 @@
 namespace Phossa\Logger\Formatter;
 
 /**
- * FormatterCapableInterface
+ * FormatterAwareInterface
  *
  * @interface
  * @package \Phossa\Logger
@@ -19,7 +19,7 @@ namespace Phossa\Logger\Formatter;
  * @version 1.0.0
  * @since   1.0.0 added
  */
-interface FormatterCapableInterface
+interface FormatterAwareInterface
 {
     /**
      * Set formatter

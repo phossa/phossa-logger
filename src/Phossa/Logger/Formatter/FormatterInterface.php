@@ -27,8 +27,8 @@ interface FormatterInterface
      * Format the log entry, return the formatted string
      *
      * class implementing this interface has to define the magic method
-     * __invoke(), which takes a Phossa\Logger\LogEntryInterface object as
-     * parameter and return the formatted string
+     * __invoke(), which takes a \Phossa\Logger\LogEntryInterface object
+     * as parameter and return the formatted string
      *
      * @param  LogEntryInterface $log the log entry
      * @return string

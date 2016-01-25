@@ -17,7 +17,7 @@ use Phossa\Logger\LogEntryInterface;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Decorator\DecoratorInterface
+ * @see     \Phossa\Logger\Decorator\DecoratorInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */

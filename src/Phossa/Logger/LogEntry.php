@@ -15,7 +15,7 @@ namespace Phossa\Logger;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\LogEntryInterface
+ * @see     \Phossa\Logger\LogEntryInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -25,7 +25,6 @@ class LogEntry implements LogEntryInterface
      * message string
      *
      * @var    string
-     * @type   string
      * @access protected
      */
     protected $message;
@@ -34,9 +33,8 @@ class LogEntry implements LogEntryInterface
      * log level
      *
      * @var    string
-     * @type   string
      * @access protected
-     * @see    Phossa\Logger\LogLevel
+     * @see    \Phossa\Logger\LogLevel
      */
     protected $level;
 
@@ -44,7 +42,6 @@ class LogEntry implements LogEntryInterface
      * UTC Unix timestamp
      *
      * @var    float
-     * @type   float
      * @access protected
      */
     protected $timestamp;
@@ -53,7 +50,6 @@ class LogEntry implements LogEntryInterface
      * contexts
      *
      * @var    array
-     * @type   array
      * @access protected
      */
     protected $context;
@@ -62,7 +58,6 @@ class LogEntry implements LogEntryInterface
      * Cascading status
      *
      * @var    bool
-     * @type   bool
      * @access protected
      */
     protected $stopped = false;

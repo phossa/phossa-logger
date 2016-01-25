@@ -1,10 +1,10 @@
 {
     "name": "phossa/phossa-logger",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "type": "library",
-    "description": "The logging package of Phossa framework",
-    "keywords": ["phossa", "framework", "logging"],
+    "description": "The PSR-3 compliant PHP logging system.",
+    "keywords": ["psr", "psr-3", "logging", "phossa", "framework"],
     "homepage": "https://github.com/phossa/phossa-logger",
     "authors": [
         {
@@ -17,8 +17,8 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phossa-shared": ">=1.0.0",
-        "psr/logger": "*"
+        "phossa/phossa-shared": "^1.0.3",
+        "psr/log": "*"
     },
     "archive": {
         "exclude": ["!vendor", "tests", "*phpunit.xml",  "composer.lock"]

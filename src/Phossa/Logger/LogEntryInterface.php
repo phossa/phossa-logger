@@ -50,7 +50,7 @@ interface LogEntryInterface
      * @return LogEntryInterface $this
      * @access public
      * @throws Exception\InvalidArgumentException if invalid level given
-     * @see    Phossa\Logger\LogLevel
+     * @see    \Phossa\Logger\LogLevel
      * @api
      */
     public function setLevel(
@@ -63,7 +63,7 @@ interface LogEntryInterface
      * @param  void
      * @return string
      * @access public
-     * @see    Phossa\Logger\LogLevel
+     * @see    \Phossa\Logger\LogLevel
      * @api
      */
     public function getLevel()/*# : string */;

@@ -20,18 +20,16 @@ use Phossa\Logger\Message\Message;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Logger\Handler\HandlerInterface
- * @see     Phossa\Logger\Handler\HandlerAbstract
+ * @see     \Phossa\Logger\Handler\HandlerAbstract
  * @version 1.0.0
  * @since   1.0.0 added
  */
-class SyslogHandler extends HandlerAbstract implements HandlerInterface
+class SyslogHandler extends HandlerAbstract
 {
     /**
      * syslog ident string
      *
      * @var    string
-     * @type   string
      * @access protected
      */
     protected $ident;
@@ -40,7 +38,6 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
      * syslog facility
      *
      * @var    int
-     * @type   int
      * @access protected
      */
     protected $facility;
@@ -49,7 +46,6 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
      * syslog options
      *
      * @var    int
-     * @type   int
      * @access protected
      */
     protected $options;
@@ -58,7 +54,6 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
      * log level to syslog priority map
      *
      * @var    array
-     * @type   array
      * @access protected
      */
     protected $map = [
@@ -77,11 +72,10 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
      *
      * @param  string $level level string
      * @param  string $ident identification string
-     * @param  int $facility (optional) syslog facility
-     * @param  int $options (optional) openlog option
+     * @param  array $configs (optional) properties to set
      * @see    openlog()
      * @see    syslog()
-     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right
      * @access public
      * @api
@@ -89,8 +83,7 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
     public function __construct(
         /*# string */ $level,
         /*# string */ $ident,
-        /*# int */ $facility = LOG_USER,
-        /*# int */ $options  = LOG_PID
+        array $configs = []
     ) {
         // level
         $this->setHandleLevel($level);
@@ -98,11 +91,13 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
         // syslog ident
         $this->ident = $ident;
 
-        // syslog facility
-        $this->facility = $facility;
-
-        // syslog options
-        $this->options  = $options;
+        // set other properties
+        $this->setProperties(
+            array_replace([
+                'facility'  => LOG_USER,
+                'options'   => LOG_PID
+            ], $configs)
+        );
     }
 
     /**
@@ -113,7 +108,7 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
     )/*# : LogEntryInterface */ {
 
         // check level
-        if ($this->isHandling($log->getLevel()) === false) return $log;
+        if (!$this->isHandling($log->getLevel())) return $log;
 
         // open syslog
         if (!openlog($this->ident, $this->options, $this->facility)) {
@@ -137,6 +132,9 @@ class SyslogHandler extends HandlerAbstract implements HandlerInterface
 
         // close syslog
         closelog();
+
+        // stop ?
+        if ($this->stop) $log->stopCascading();
 
         return $log;
     }
