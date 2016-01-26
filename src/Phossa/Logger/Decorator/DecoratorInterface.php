@@ -15,29 +15,50 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * Log decorator
  *
- * Normally, decorator is used to process the log, add context fields to the
+ * Normally, a decorator is used to process the log, add context fields to the
  * log etc. Implementation has to make '__invoke()' concrete, thus the
  * decorator instance is a callable
  *
  * @interface
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
+ * @since   1.0.1 __invoke() returns void now
  */
 interface DecoratorInterface
 {
+    /**
+     * Stop this decorator, bypass this decorator
+     *
+     * @param  bool $stop stop or not
+     * @return void
+     * @access public
+     * @api
+     */
+    public function stopDecorator(/*# bool */ $stop = true);
+
+    /**
+     * Is this decorator stopped
+     *
+     * @param  void
+     * @return bool
+     * @access public
+     * @api
+     */
+    public function isDecoratorStopped()/*# : bool */;
+
     /**
      * Make $this callable
      *
      * class implementing this interface has to define the magic method
      * __invoke(), which takes a Phossa\Logger\LogEntryInterface object as
-     * parameter and also return the same LogEntryInterface object
+     * parameter.
      *
      * @param  LogEntryInterface $log the log entry
-     * @return LogEntryInterface
+     * @return void
      * @access public
      * @api
      */
-    public function __invoke(LogEntryInterface $log)/*# : LogEntryInterface */;
+    public function __invoke(LogEntryInterface $log);
 }

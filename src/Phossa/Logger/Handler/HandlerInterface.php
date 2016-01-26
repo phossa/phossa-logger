@@ -18,8 +18,9 @@ use Phossa\Logger\LogEntryInterface;
  * @interface
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
+ * @since   1.0.1 __invoke() returns void now
  */
 interface HandlerInterface
 {
@@ -28,7 +29,7 @@ interface HandlerInterface
      *
      * @param  string $level log level
      * @return bool
-     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right
      * @access public
      * @see    \Phossa\Logger\LogLevel::getLevelCode
@@ -63,16 +64,56 @@ interface HandlerInterface
     public function getHandleLevelCode()/*# : int */;
 
     /**
+     * Stop this handler, bypass this handler
+     *
+     * @param  bool $stop stop or not
+     * @return void
+     * @access public
+     * @api
+     */
+    public function stopHandler(/*# bool */ $stop = true);
+
+    /**
+     * Is this handler stopped
+     *
+     * @param  void
+     * @return bool
+     * @access public
+     * @api
+     */
+    public function isHandlerStopped()/*# : bool */;
+
+    /**
+     * stop bubbling up
+     *
+     * @param  bool $stop stop bubbling or not
+     * @return void
+     * @access public
+     * @api
+     */
+    public function stopBubbling(/*# bool */ $stop = true);
+
+    /**
+     * Is bubbling stopped
+     *
+     * @param  void
+     * @return bool
+     * @access public
+     * @api
+     */
+    public function isBubblingStopped()/*# : bool */;
+
+    /**
      * Make this callable
      *
      * class implementing this interface has to define the magic method
      * __invoke(), which takes a \Phossa\Logger\LogEntryInterface object
-     * as parameter and also return the same LogEntryInterface object
+     * as parameter.
      *
      * @param  LogEntryInterface $log the log entry
-     * @return LogEntryInterface
+     * @return void
      * @access public
      * @api
      */
-    public function __invoke(LogEntryInterface $log)/*# : LogEntryInterface */;
+    public function __invoke(LogEntryInterface $log);
 }

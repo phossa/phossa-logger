@@ -46,7 +46,7 @@ composer require "phossa/phossa-logger=1.*"
 
 # Version
 
-1.0.1
+1.0.2
 
 # Dependencies
 

@@ -16,8 +16,9 @@ namespace Phossa\Logger;
  * @interface
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
+ * @since   1.0.1 removed stopCascading() etc.
  */
 interface LogEntryInterface
 {
@@ -136,22 +137,12 @@ interface LogEntryInterface
     public function getContext(/*# string */ $name);
 
     /**
-     * Stop log entry cascade downwards
+     * To string
      *
      * @param  void
-     * @return void
+     * @return string
      * @access public
      * @api
      */
-    public function stopCascading();
-
-    /**
-     * Get current cascading status
-     *
-     * @param  void
-     * @return bool
-     * @access public
-     * @api
-     */
-    public function isCascadingStopped();
+    public function __toString()/*# : string */;
 }

@@ -16,8 +16,9 @@ namespace Phossa\Logger;
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\LogEntryInterface
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
+ * @since   1.0.1 removed stopCascading() etc.
  */
 class LogEntry implements LogEntryInterface
 {
@@ -39,7 +40,7 @@ class LogEntry implements LogEntryInterface
     protected $level;
 
     /**
-     * UTC Unix timestamp
+     * UTC UNIX timestamp
      *
      * @var    float
      * @access protected
@@ -53,14 +54,6 @@ class LogEntry implements LogEntryInterface
      * @access protected
      */
     protected $context;
-
-    /**
-     * Cascading status
-     *
-     * @var    bool
-     * @access protected
-     */
-    protected $stopped = false;
 
     /**
      * Constructor
@@ -89,7 +82,7 @@ class LogEntry implements LogEntryInterface
     public function setMessage(
         /*# string */ $message
     )/*# : LogEntryInterface */ {
-        $this->message = $message;
+        $this->message = strval($message);
         return $this;
     }
 
@@ -163,7 +156,7 @@ class LogEntry implements LogEntryInterface
         /*# string */ $name,
         $value
     )/*# : LogEntryInterface */ {
-        $this->context[(string) $name] = $value;
+        $this->context[strval($name)] = $value;
         return $this;
     }
 
@@ -180,27 +173,6 @@ class LogEntry implements LogEntryInterface
 
     /**
      * {@inheritDoc}
-     */
-    public function stopCascading()
-    {
-        $this->stopped = true;
-    }
-
-    /**
-     * Get current cascading status
-     *
-     * @param  void
-     * @return bool
-     * @access public
-     * @api
-     */
-    public function isCascadingStopped()
-    {
-        return $this->stopped;
-    }
-
-    /**
-     * To string.
      */
     public function __toString()
     {

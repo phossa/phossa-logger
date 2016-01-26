@@ -17,22 +17,23 @@ use Phossa\Logger\LogEntryInterface;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @see     \Phossa\Logger\Decorator\DecoratorInterface
- * @version 1.0.0
+ * @see     \Phossa\Logger\Decorator\DecoratorTrait
+ * @version 1.0.1
  * @since   1.0.0 added
+ * @since   1.0.1 __invoke() returns void now, extends DecoratorAbstract
  */
-class InterpolateDecorator implements DecoratorInterface
+class InterpolateDecorator extends DecoratorAbstract
 {
     /**
-     * {@inheritDoc}
+     * Replace any '{item}' in the messsage with context['item'] value
      *
      * @see     http://www.php-fig.org/psr/psr-3/
      * Interpolates '{placeholder}' into text according to context array
      */
-    public function __invoke(LogEntryInterface $log)/*# : LogEntryInterface */
+    public function __invoke(LogEntryInterface $log)
     {
         $msg = $log->getMessage();
-        if (strpos($msg, '{') === false) return $log;
+        if (strpos($msg, '{') === false) return;
 
         // build a replacement array with braces around the context keys
         $replace = [];
@@ -48,7 +49,7 @@ class InterpolateDecorator implements DecoratorInterface
                     $xval = 'OBJECT: '.get_class($val);
                 }
             } elseif (is_scalar($val)) {
-                $xval = (string) $val;
+                $xval = strval($val);
             } else {
                 $xval = 'TYPE: '.strtoupper(gettype($val));
             }
@@ -56,6 +57,6 @@ class InterpolateDecorator implements DecoratorInterface
         }
 
         // interpolate replacement values into the message
-        return $log->setMessage(strtr($msg, $replace));
+        $log->setMessage(strtr($msg, $replace));
     }
 }

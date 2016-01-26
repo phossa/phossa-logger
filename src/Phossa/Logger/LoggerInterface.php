@@ -26,12 +26,44 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 interface LoggerInterface extends PsrLoggerInterface
 {
     /**
-     * Set logEntry handlers
+     * Set channel(id)
      *
-     * Handler can be instance of Handler\HandlerInterface or callable. If
-     * empty, set the default handler to Handler\SyslogHandler
+     * @param  string $channel logger channel (id)
+     * @return void
+     * @access public
+     * @api
+     */
+    public function setChannel(/*# string */ $channel);
+
+    /**
+     * Get channel (id)
      *
-     * @param  callable[] $handlers handle array
+     * @param  void
+     * @return string
+     * @access public
+     * @api
+     */
+    public function getChannel()/*# : string */;
+
+    /**
+     * Is handling this log level ?
+     *
+     * @param  string $level log level
+     * @return bool
+     * @throws \Phossa\Logger\Exception\InvalidArgumentException
+     *         if $level not right
+     * @access public
+     * @see    \Phossa\Logger\LogLevel::getLevelCode
+     * @api
+     */
+    public function isHandling(/*# string */ $level)/*# : bool */;
+    
+    /**
+     * Set handlers
+     *
+     * Handler can be instance of Handler\HandlerInterface or other callable.
+     *
+     * @param  callable[] $handlers handles array
      * @param  bool $flush (optional) empty handlers first
      * @return void
      * @throws Exception\InvalidArgumentException
@@ -45,11 +77,11 @@ interface LoggerInterface extends PsrLoggerInterface
     );
 
     /**
-     * Add a logEntry handler
+     * Add a handler
      *
-     * Handler can be instance of Handler\HandlerInterface or callable.
+     * Handler can be instance of Handler\HandlerInterface or other callable.
      *
-     * @param  callable $handler the handle
+     * @param  callable $handler the handler
      * @return void
      * @throws Exception\InvalidArgumentException
      *         if not the valid handler
@@ -59,7 +91,7 @@ interface LoggerInterface extends PsrLoggerInterface
     public function addHandler(callable $handler);
 
     /**
-     * Get logEntry handlers
+     * Get handlers
      *
      * @param  void
      * @return callable[]
@@ -69,9 +101,12 @@ interface LoggerInterface extends PsrLoggerInterface
     public function getHandlers()/*# : array */;
 
     /**
-     * Set logEntry decorators
+     * Set decorators
      *
-     * @param  callable[] $decorators decorator array
+     * Decorator can be instance of Decorator\DecoratorInterface or other
+     * callable.
+     *
+     * @param  callable[] $decorators decorators array
      * @param  bool $flush (optional) empty decorators first
      * @return void
      * @throws Exception\InvalidArgumentException if not valid decorator
@@ -84,9 +119,10 @@ interface LoggerInterface extends PsrLoggerInterface
     );
 
     /**
-     * Add a logEntry decorator
+     * Add a decorator
      *
-     * Handler can be instance of Decorator\DecoratorInterface or callable.
+     * Decorator can be instance of Decorator\DecoratorInterface or other
+     * callable.
      *
      * @param  callable $decorator the decorator
      * @return void
@@ -98,7 +134,7 @@ interface LoggerInterface extends PsrLoggerInterface
     public function addDecorator(callable $decorator);
 
     /**
-     * Get logEntry decorators
+     * Get decorators
      *
      * @param  void
      * @return callable[]

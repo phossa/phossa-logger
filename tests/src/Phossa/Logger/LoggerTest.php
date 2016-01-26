@@ -17,7 +17,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Logger('mylog');
+        $this->object = new Logger('phossa-log');
     }
 
     /**
@@ -29,15 +29,34 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Phossa\Logger\Logger::getChannel
+     */
+    public function testGetChannel()
+    {
+        $this->assertEquals('phossa-log', $this->object->getChannel());
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::setChannel
+     */
+    public function testSetChannel()
+    {
+        $this->object->setChannel('newChannel');
+        $this->assertEquals('newChannel', $this->object->getChannel());
+    }
+
+    /**
      * @covers Phossa\Logger\Logger::setHandlers
      */
     public function testSetHandlers()
     {
         // callable
         $handlers = [
-            new Handler\SyslogHandler(LogLevel::ERROR, 'phossa-log'),
-            function($log) {
-                return $log;
+            new Handler\SyslogHandler(
+                $this->object->getChannel(), LogLevel::ERROR
+            ),
+            function(LogEntryInterface $log) {
+               $log->getMessage();
             }
         ];
         $this->object->setHandlers($handlers);
@@ -45,6 +64,8 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * not a callable
+     *
      * @covers Phossa\Logger\Logger::setHandlers
      * @expectedExceptionCode Phossa\Logger\Message\Message::INVALID_LOG_HANDLER
      * @expectedException Phossa\Logger\Exception\InvalidArgumentException
@@ -56,6 +77,51 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             'bingo'
         ];
         $this->object->setHandlers($handlers);
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::addHandler
+     */
+    public function testAddHandler()
+    {
+        // add handler
+        $handler = new Handler\SyslogHandler(
+            $this->object->getChannel(), LogLevel::INFO
+        );
+        $this->object->addHandler($handler);
+
+        $this->assertEquals(1, count($this->object->getHandlers()));
+
+        // lowest level
+        $this->assertFalse($this->object->isHandling(LogLevel::DEBUG));
+        $this->assertTrue($this->object->isHandling(LogLevel::INFO));
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::addHandler
+     */
+    public function testAddHandler2()
+    {
+        // add handler
+        $handler = function($log) { };
+        $this->object->addHandler($handler);
+
+        $this->assertEquals(1, count($this->object->getHandlers()));
+
+        // lowest level
+        $this->assertFalse($this->object->isHandling(LogLevel::NOTICE));
+        $this->assertTrue($this->object->isHandling(LogLevel::WARNING));
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::addHandler
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testAddHandler3()
+    {
+        // non callable
+        $handler = 'test';
+        $this->object->addHandler($handler);
     }
 
     /**
@@ -86,7 +152,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Phossa\Logger\Logger::setHandlers
+     * @covers Phossa\Logger\Logger::setDecorators
      * @expectedExceptionCode Phossa\Logger\Message\Message::INVALID_LOG_DECORATOR
      * @expectedException Phossa\Logger\Exception\InvalidArgumentException
      */
@@ -100,6 +166,26 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Phossa\Logger\Logger::addDecorator
+     */
+    public function testAddDecorator()
+    {
+        $this->object->addDecorator(function($log) {});
+        $this->assertEquals(1, count($this->object->getDecorators()));
+    }
+
+    /**
+     * @covers Phossa\Logger\Logger::addDecorator
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testAddDecorator2()
+    {
+        // non callable
+        $deco = 'test';
+        $this->object->addDecorator($deco);
+    }
+
+    /**
      * @covers Phossa\Logger\Logger::getDecorators
      */
     public function testGetDecorators()
@@ -108,7 +194,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->object->info('test');
         $da = $this->object->getDecorators();
 
-        $this->assertInstanceOf('Phossa\Logger\Decorator\InterpolateDecorator', $da[0]);
+        $this->assertInstanceOf(
+            'Phossa\Logger\Decorator\InterpolateDecorator',
+            $da[0]
+        );
     }
 
     /**
@@ -117,6 +206,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testLog()
     {
+        $this->object->addHandler(new Handler\EchoHandler(LogLevel::WARNING));
+
+        $this->expectOutputRegex('/ERROR: test wow/');
+
         $this->object->log(LogLevel::ERROR, 'test {bingo}', ['bingo' => 'wow']);
     }
 }

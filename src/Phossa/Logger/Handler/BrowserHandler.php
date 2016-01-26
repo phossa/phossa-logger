@@ -10,15 +10,18 @@
 
 namespace Phossa\Logger\Handler;
 
+use Phossa\Logger\LogLevel;
+use Phossa\Logger\LogEntryInterface;
+
 /**
  * BrowserHandler
  *
- * Send log message to browser console. Modified from
- * \Monolog\Handler\BrowserConsoleHandler
+ * - Send log message to browser console.
+ * - Modified from \Monolog\Handler\BrowserConsoleHandler
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.1
+ * @version 1.0.2
  * @since   1.0.1 added
  */
 class BrowserHandler extends HandlerAbstract
@@ -33,6 +36,14 @@ class BrowserHandler extends HandlerAbstract
     protected static $messages = [];
 
     /**
+     * debug
+     *
+     * @var    bool
+     * @access protected
+     */
+    protected $debug = false;
+
+    /**
      * Constructor
      *
      * @param  string $level level string
@@ -43,7 +54,7 @@ class BrowserHandler extends HandlerAbstract
      * @api
      */
     public function __construct(
-        /*# string */ $level,
+        /*# string */ $level = LogLevel::NOTICE,
         array $configs = []
     ) {
         // level
@@ -53,7 +64,7 @@ class BrowserHandler extends HandlerAbstract
         $this->setProperties($configs);
 
         // flush to browser console
-        if (PHP_SAPI !== 'cli') {
+        if (!$this->debug && PHP_SAPI !== 'cli') {
             register_shutdown_function([__CLASS__, 'flush']);
         }
     }
@@ -61,20 +72,9 @@ class BrowserHandler extends HandlerAbstract
     /**
      * {@inheritDoc}
      */
-    public function __invoke(
-        LogEntryInterface $log
-    )/*# : LogEntryInterface */ {
-
-        // check level
-        if (!$this->isHandling($log->getLevel())) return $log;
-
-        // add messages
+    public function __invoke(LogEntryInterface $log)
+    {
         static::$messages[] = call_user_func($this->getFormatter(), $log);
-
-        // stop ?
-        if ($this->stop) $log->stopCascading();
-
-        return $log;
     }
 
     /**
@@ -113,14 +113,15 @@ class BrowserHandler extends HandlerAbstract
         static::$messages = [];
     }
 
-    private static function generateScript()
+    protected static function generateScript()
     {
         $script = array();
         foreach (static::$messages as $record) {
             $script[] = static::callArray('log', static::handleStyles($record));
         }
         return "(function (c) {if (c && c.groupCollapsed) {\n" .
-            implode("\n", $script) . "\n}})(console);";
+            implode("\n", $script) .
+            "\n}})(console);";
     }
 
     protected static function callArray($method, array $args)

@@ -16,12 +16,22 @@ use Phossa\Logger\Message\Message;
 /**
  * Logger
  *
+ * e.g.
+ * <code>
+ *     // default to syslog handler with interpolate decorator
+ *     $logger = new \Phossa\Logger\Logger('mylogger');
+ *
+ *     // issue a notice
+ *     $logger->notice('send a notice');
+ * </code>
+ *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Psr\Log\AbstractLogger
  * @see     \Phossa\Logger\LoggerInterface
- * @version 1.0.0
+ * @version 1.0.2
  * @since   1.0.0 added
+ * @since   1.0.1 added setChannel()/getChannel()
  */
 class Logger extends AbstractLogger implements LoggerInterface
 {
@@ -47,7 +57,7 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @var    callable
      * @access protected
      */
-    protected $factory;
+    protected $log_factory;
 
     /**
      * Minimum level code
@@ -55,34 +65,35 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @var    int
      * @access protected
      */
-    protected $level_code = 0;
+    protected $level_code;
 
     /**
-     * identification string
+     * channel string
      *
      * @var    string
      * @access protected
      */
-    protected $ident;
+    protected $channel;
 
     /**
      * constructor
      *
-     * @param  string $ident the logger identification string
+     * @param  string $channel the logger channel/id string
      * @param  callable[] $handlers (optional) callable handler array
      * @param  callable[] $decorators (optional) callable decorator array
-     * @param  callable $factory (optional) log factory callable
+     * @param  callable $logFactory (optional) log factory callable
      * @throws Exception\InvalidArgumentException
      * @access public
+     * @api
      */
     public function __construct(
-        /*# string */ $ident,
+        /*# string */ $channel,
         array $handlers   = [],
         array $decorators = [],
-        callable $factory = null
+        callable $logFactory = null
     ) {
-        // set id
-        $this->ident = $ident;
+        // set channel/id
+        $this->setChannel($channel);
 
         // set decorators
         $this->setDecorators($decorators);
@@ -90,8 +101,36 @@ class Logger extends AbstractLogger implements LoggerInterface
         // set handlers
         $this->setHandlers($handlers);
 
+        // set default minimum level
+        $this->level_code = LogLevel::getLevelCode(LogLevel::WARNING);
+
         // log entry factory if any
-        if ($factory) $this->factory = $factory;
+        if ($logFactory) $this->log_factory = $logFactory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChannel(/*# string */ $channel)
+    {
+        $this->channel = (string) $channel;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getChannel()/*# : string */
+    {
+        return $this->channel;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isHandling(/*# string */ $level)/*# : bool */
+    {
+        if (LogLevel::getLevelCode($level) < $this->level_code) return false;
+        return true;
     }
 
     /**
@@ -114,7 +153,7 @@ class Logger extends AbstractLogger implements LoggerInterface
                             Message::INVALID_LOG_HANDLER,
                             is_object($handler) ?
                                 get_class($handler) :
-                                (string) $handler
+                                strval($handler)
                         ),
                         Message::INVALID_LOG_HANDLER
                     );
@@ -133,7 +172,7 @@ class Logger extends AbstractLogger implements LoggerInterface
     {
         if ($handler instanceof Handler\HandlerInterface) {
             $c = $handler->getHandleLevelCode();
-            if ($c > $this->level_code) $this->level_code = $c;
+            if ($c < $this->level_code) $this->level_code = $c;
         }
         $this->handlers[] = $handler;
     }
@@ -165,7 +204,7 @@ class Logger extends AbstractLogger implements LoggerInterface
                             Message::INVALID_LOG_DECORATOR,
                             is_object($deco) ?
                                 get_class($deco) :
-                                gettype($deco)
+                                strval($deco)
                         ),
                         Message::INVALID_LOG_DECORATOR
                     );
@@ -199,40 +238,59 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
-        // check minimum level, Exception expected
-        $code = LogLevel::getLevelCode($level);
-        if ($code < $this->level_code) return;
-
-        // create logEntry
-        if ($this->factory) {
-            $log = call_user_func(
-                $this->factory, $level, (string) $message, $context);
-        } else {
-            $log = new LogEntry($level, (string) $message, $context);
-        }
-
         // set default decorator if empty
         if (empty($this->decorators)) {
             $this->addDecorator(new Decorator\InterpolateDecorator());
         }
 
-        // loop thru decorators
-        foreach ($this->decorators as $deco) {
-            $log = call_user_func($deco, $log);
-        }
-
-        // set default syslog if empty
+        // set default handler if empty
         if (empty($this->handlers)) {
             $this->addHandler(new Handler\SyslogHandler(
-                LogLevel::NOTICE,
-                $this->ident
+                $this->getChannel(),
+                LogLevel::NOTICE
             ));
+        }
+
+        // handling this level ?
+        if (!$this->isHandling($level)) return;
+
+        // set channel context (reserved)
+        $context['__CHANNEL__'] = $this->getChannel();
+
+        // create logEntry
+        if ($this->log_factory) {
+            $log = call_user_func(
+                $this->log_factory, $level, $message, $context
+            );
+        } else {
+            $log = new LogEntry($level, $message, $context);
+        }
+
+        // loop thru decorators
+        foreach ($this->decorators as $deco) {
+            if (! $deco instanceof Decorator\DecoratorInterface ||
+                ! $deco->isDecoratorStopped()) {
+                call_user_func($deco, $log);
+            }
         }
 
         // loop thru handlers
         foreach($this->handlers as $handler) {
-            $log = call_user_func($handler, $log);
-            if ($log->isCascadingStopped()) break;
+            // handler instance
+            if ($handler instanceof Handler\HandlerInterface) {
+                // call handler instance
+                if (!$handler->isHandlerStopped() &&
+                    $handler->isHandling($log->getLevel())) {
+                    call_user_func($handler, $log);
+                }
+
+                // bubbling stopped
+                if ($handler->isBubblingStopped()) break;
+
+            // other callable
+            } else {
+                call_user_func($handler, $log);
+            }
         }
     }
 }

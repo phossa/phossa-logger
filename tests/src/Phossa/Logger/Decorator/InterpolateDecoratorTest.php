@@ -27,6 +27,26 @@ class InterpolateDecoratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
     }
+    /**
+     * @covers Phossa\Logger\Decorator\InterpolateDecorator::stopDecorator
+     */
+    public function testStopDecorator()
+    {
+        $this->object->stopDecorator();
+        $this->assertTrue($this->object->isDecoratorStopped());
+        $this->object->stopDecorator(false);
+        $this->assertFalse($this->object->isDecoratorStopped());
+    }
+
+    /**
+     * @covers Phossa\Logger\Decorator\InterpolateDecorator::isDecoratorStopped
+     */
+    public function testIsDecoratorStopped()
+    {
+        $this->assertFalse($this->object->isDecoratorStopped());
+        $this->object->stopDecorator();
+        $this->assertTrue($this->object->isDecoratorStopped());
+    }
 
     /**
      * @covers Phossa\Logger\Decorator\InterpolateDecorator::__invoke
@@ -38,16 +58,16 @@ class InterpolateDecoratorTest extends \PHPUnit_Framework_TestCase
             '{test} {bingo}',
             array('bingo' => '{bingo2}')
         );
-        $log2 = call_user_func($this->object, $log);
-        $this->assertEquals('{test} {bingo2}', $log2->getMessage());
+        call_user_func($this->object, $log);
+        $this->assertEquals('{test} {bingo2}', $log->getMessage());
 
-        $log2->setContext('bingo2', 2);
-        $log3 = call_user_func($this->object, $log2);
-        $this->assertEquals('{test} 2', $log3->getMessage());
+        $log->setContext('bingo2', 2);
+        call_user_func($this->object, $log);
+        $this->assertEquals('{test} 2', $log->getMessage());
 
-        $log3->setContext('test', true);
-        $log4 = call_user_func($this->object, $log3);
-        $this->assertEquals('1 2', $log4->getMessage());
+        $log->setContext('test', true);
+        call_user_func($this->object, $log);
+        $this->assertEquals('1 2', $log->getMessage());
     }
 
     /**
@@ -61,17 +81,17 @@ class InterpolateDecoratorTest extends \PHPUnit_Framework_TestCase
             array('bingo' => $this)
         );
 
-        $log2 = call_user_func($this->object, $log);
+        call_user_func($this->object, $log);
         $this->assertEquals(
             '{test} OBJECT: Phossa\Logger\Decorator\InterpolateDecoratorTest',
-            $log2->getMessage()
+            $log->getMessage()
         );
 
-        $log2->setContext('test', new \Exception('test'));
-        $log3 = call_user_func($this->object, $log2);
+        $log->setContext('test', new \Exception('test'));
+        call_user_func($this->object, $log);
         $this->assertEquals(
             'EXCEPTION: test OBJECT: Phossa\Logger\Decorator\InterpolateDecoratorTest',
-            $log3->getMessage()
+            $log->getMessage()
         );
     }
 }

@@ -10,6 +10,10 @@
 
 namespace Phossa\Logger\Handler;
 
+use Phossa\Logger\LogLevel;
+use Phossa\Logger\Exception;
+use Phossa\Logger\Message\Message;
+use Phossa\Logger\LogEntryInterface;
 use Phossa\Logger\Formatter\AnsiFormatter;
 
 /**
@@ -19,6 +23,7 @@ use Phossa\Logger\Formatter\AnsiFormatter;
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
+ * @see     \Phossa\Logger\Handler\StreamHandler
  * @version 1.0.1
  * @since   1.0.1 added
  */
@@ -35,25 +40,22 @@ class TerminalHandler extends StreamHandler
     /**
      * Constructor
      *
+     * @param  string|resource $device the terminal device
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
-     * @param  string|resource $device the terminal device
-     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right, $device not right
      * @access public
      * @api
      */
     public function __construct(
-        /*# string */ $level,
-        array $configs = [],
-        /*# string */ $device = 'php://stderr'
+        /*# string */ $device = 'php://stderr',
+        /*# string */ $level  = LogLevel::NOTICE,
+        array $configs = []
     ) {
         // open terminal
-        $stream = @fopen($device);
-        if (is_resource($stream)) {
-            // default ansi formatter
-            if ($this->color) $this->setFormatter(new AnsiFormatter());
-        } else {
+        $stream = @fopen($device, 'a');
+        if (!is_resource($stream)) {
             throw new Exception\InvalidArgumentException(
                 Message::get(
                     Message::INVALID_LOG_STREAM,
@@ -64,6 +66,22 @@ class TerminalHandler extends StreamHandler
         }
 
         // parent constructor
-        parent::__construct($level, $stream, $configs);
+        parent::__construct($stream, $level, $configs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __invoke(LogEntryInterface $log)
+    {
+        // set ansi color formatter
+        if ($this->color) {
+            $ansi = new AnsiFormatter();
+            if ($this->formatter) $ansi->setSlave($this->formatter);
+            $this->setFormatter($ansi);
+        }
+
+        // invoke parent's __invoke
+        parent::__invoke($log);
     }
 }

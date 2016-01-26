@@ -103,24 +103,6 @@ class LogEntryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Phossa\Logger\LogEntry::stopCascading
-     */
-    public function testStopCascading()
-    {
-        $this->assertEquals(false, $this->object->isCascadingStopped());
-        $this->object->stopCascading();
-        $this->assertEquals(true, $this->object->isCascadingStopped());
-    }
-
-    /**
-     * @covers Phossa\Logger\LogEntry::isCascadingStopped
-     */
-    public function testIsCascadingStopped()
-    {
-        $this->assertEquals(false, $this->object->isCascadingStopped());
-    }
-
-    /**
      * @covers Phossa\Logger\LogEntry::__toString
      */
     public function testToString()

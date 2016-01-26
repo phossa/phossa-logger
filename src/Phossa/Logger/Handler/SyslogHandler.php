@@ -10,10 +10,10 @@
 
 namespace Phossa\Logger\Handler;
 
-use Phossa\Logger\LogEntryInterface;
 use Phossa\Logger\LogLevel;
 use Phossa\Logger\Exception;
 use Phossa\Logger\Message\Message;
+use Phossa\Logger\LogEntryInterface;
 
 /**
  * SyslogHandler
@@ -70,19 +70,19 @@ class SyslogHandler extends HandlerAbstract
     /**
      * Constructor
      *
-     * @param  string $level level string
      * @param  string $ident identification string
+     * @param  string $level (optional) level string
      * @param  array $configs (optional) properties to set
      * @see    openlog()
      * @see    syslog()
-     * @throws \Phossa\Logger\Exception\InvalidArgumentException
+     * @throws Exception\InvalidArgumentException
      *         if $level not right
      * @access public
      * @api
      */
     public function __construct(
-        /*# string */ $level,
-        /*# string */ $ident,
+        /*# string */ $ident = 'phossa-log',
+        /*# string */ $level = LogLevel::NOTICE,
         array $configs = []
     ) {
         // level
@@ -103,13 +103,8 @@ class SyslogHandler extends HandlerAbstract
     /**
      * {@inheritDoc}
      */
-    public function __invoke(
-        LogEntryInterface $log
-    )/*# : LogEntryInterface */ {
-
-        // check level
-        if (!$this->isHandling($log->getLevel())) return $log;
-
+    public function __invoke(LogEntryInterface $log)
+    {
         // open syslog
         if (!openlog($this->ident, $this->options, $this->facility)) {
             throw new Exception\InvalidArgumentException(
@@ -132,10 +127,5 @@ class SyslogHandler extends HandlerAbstract
 
         // close syslog
         closelog();
-
-        // stop ?
-        if ($this->stop) $log->stopCascading();
-
-        return $log;
     }
 }

@@ -10,8 +10,10 @@
 
 namespace Phossa\Logger\Handler;
 
+use Phossa\Logger\LogLevel;
 use Phossa\Logger\Exception;
 use Phossa\Logger\Message\Message;
+use Phossa\Logger\LogEntryInterface;
 
 /**
  * StreamHandler
@@ -35,17 +37,17 @@ class StreamHandler extends HandlerAbstract
     /**
      * Constructor
      *
-     * @param  string $level level string
      * @param  string|resource $stream the stream
+     * @param  string $level level string
      * @param  array $configs (optional) properties to set
-     * @throws Phossa\Logger\Exception\InvalidArgumentException
+     * @throws Exception\InvalidArgumentException
      *         if $level not right, $stream not right
      * @access public
      * @api
      */
     public function __construct(
-        /*# string */ $level,
-        $stream,
+        $stream = 'php://stdout',
+        /*# string */ $level = LogLevel::NOTICE,
         array $configs = []
     ) {
         // level
@@ -53,15 +55,20 @@ class StreamHandler extends HandlerAbstract
 
         // file
         if (is_string($stream)) {
+            $_stream = null;
+
             // file:// prefix ?
             if ('file://' === substr($stream, 0, 7)) {
                 $stream = substr($stream, 7);
-            }
-            // mkdir
-            $dirname = dirname($stream);
-            if ($dirname && !is_dir($dirname)) @mkdir($dirname, 0777, true);
+                $dirname = dirname($stream);
+                if ($dirname && !is_dir($dirname)) @mkdir($dirname, 0777, true);
+                $_stream = @fopen($stream, 'a');
 
-            $_stream = @fopen($stream, 'a');
+            // php::// etc.
+            } else if (strpos($stream, '://') !== false) {
+                $_stream = @fopen($stream, 'a');
+            }
+
             if (is_resource($_stream)) $stream = $_stream;
         }
 
@@ -84,22 +91,18 @@ class StreamHandler extends HandlerAbstract
     /**
      * {@inheritDoc}
      */
-    public function __invoke(
-        LogEntryInterface $log
-    )/*# : LogEntryInterface */ {
-        // check level
-        if (!$this->isHandling($log->getLevel())) return $log;
-
-        // write to log
+    public function __invoke(LogEntryInterface $log)
+    {
+        // lock
         flock( $this->stream, LOCK_EX);
-        fwrite($this->stream,
+
+        // write to stream
+        fwrite(
+            $this->stream,
             call_user_func($this->getFormatter(), $log) . PHP_EOL
         );
+
+        // release lock
         flock( $this->stream, LOCK_UN);
-
-        // stop ?
-        if ($this->stop) $log->stopCascading();
-
-        return $log;
     }
 }

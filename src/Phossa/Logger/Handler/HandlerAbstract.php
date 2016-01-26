@@ -31,12 +31,4 @@ abstract class HandlerAbstract implements
     use HandlerTrait,
         Formatter\FormatterAwareTrait,
         \Phossa\Shared\Pattern\SetPropertiesTrait;
-
-    /**
-     * stop cascading
-     *
-     * @var    bool
-     * @access protected
-     */
-    protected $stop = false;
 }

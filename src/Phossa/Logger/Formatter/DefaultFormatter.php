@@ -18,7 +18,7 @@ use Phossa\Logger\LogEntryInterface;
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\Formatter\FormatterAbstract
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
  * @since   1.0.1 extends FormatterAbstract
  */
@@ -30,7 +30,7 @@ class DefaultFormatter extends FormatterAbstract
      * @var    string
      * @access protected
      */
-    protected $format = '%datetime% [%level_name%]: %message%';
+    protected $format = '[%datetime%] %channel%.%level_name%: %message%';
 
     /**
      * {@inheritDoc}
@@ -39,10 +39,32 @@ class DefaultFormatter extends FormatterAbstract
     {
         $data = [
             '%datetime%'    => date('Y-m-d H:i:s', $log->getTimestamp()),
+            '%channel%'     => $log->getContext('__CHANNEL__'),
             '%level_name%'  => strtoupper($log->getLevel()),
-            '%message%'     => $log->getMessage()
+            '%message%'     => $log->getMessage(),
+            '%context%'     => $this->printContext($log->getContexts())
         ];
-        
+
         return strtr($this->format, $data);
+    }
+
+    /**
+     * Convert context
+     *
+     * @param  array $context the context
+     * @return string
+     * @access protected
+     */
+    protected function printContext(array $context)
+    {
+        $res = '';
+        foreach($context as $name => $val) {
+            // bypass internal context
+            if (substr($name,0,2) === '__') continue;
+
+            // concat contexts
+            $res .= " $name: " . strval($val);
+        }
+        return $res ?: '';
     }
 }

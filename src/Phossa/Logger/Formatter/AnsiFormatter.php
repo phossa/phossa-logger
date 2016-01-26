@@ -16,14 +16,14 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * AnsiFormatter
  *
- * Print with ANSI color
+ * Format with ANSI color
  *
  * @package \Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @version 1.0.1
  * @since   1.0.1 added
  */
-class AnsiFormatter extends DefaultFormatter
+class AnsiFormatter extends FormatterAbstract
 {
     /**
      * foreground color
@@ -69,6 +69,8 @@ class AnsiFormatter extends DefaultFormatter
     const DECO_END               = "\033[0m";
 
     /**
+     * Color definitions for different log levels
+     *
      * format  [ fgColor, bgColor, textDeco ]
      *
      * @access  protected
@@ -76,7 +78,7 @@ class AnsiFormatter extends DefaultFormatter
      */
     protected $colors = array(
         LogLevel::DEBUG     => [ self::FGCOLOR_GRAY,  null, null ],
-        LogLevel::INFO      => [ self::FGCOLOR_WHITE, null, null ],
+        LogLevel::INFO      => [ null, null, null ],
         LogLevel::NOTICE    => [ self::FGCOLOR_BRIGHT_GREEN, null, null ],
         LogLevel::WARNING   => [ self::FGCOLOR_BRIGHT_YELLOW, null, null ],
         LogLevel::ERROR     => [ self::FGCOLOR_BRIGHT_RED, null, null ],
@@ -90,6 +92,14 @@ class AnsiFormatter extends DefaultFormatter
             self::FGCOLOR_BRIGHT_RED, self::BGCOLOR_WHITE, self::DECO_BLINK
         ],
     );
+
+    /**
+     * Slave formatter
+     *
+     * @var    FormatterInterface
+     * @access protected
+     */
+    protected $slave;
 
     /**
      * add ansi color to text
@@ -112,12 +122,30 @@ class AnsiFormatter extends DefaultFormatter
     }
 
     /**
+     * Set slave
+     *
+     * @param  FormatterInterface $formatter the normal formatter
+     * @return void
+     * @access public
+     * @api
+     */
+    public function setSlave(FormatterInterface $formatter)
+    {
+        $this->slave = $formatter;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function __invoke(LogEntryInterface $log)/*# : string */
     {
+        // check slave first
+        if (is_null($this->slave)) {
+            $this->setSlave(new DefaultFormatter());
+        }
+
         return $this->addColor(
-            parent::__invoke($log),
+            call_user_func($this->slave, $log),
             $this->colors[$log->getLevel()] // color definition
         );
     }

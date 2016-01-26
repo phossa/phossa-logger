@@ -33,6 +33,22 @@ trait HandlerTrait
     protected $level_code = 0;
 
     /**
+     * handler stopped or not
+     *
+     * @var    bool
+     * @access protected
+     */
+    protected $stopped    = false;
+
+    /**
+     * bubbling up or not
+     *
+     * @var    bool
+     * @access protected
+     */
+    protected $bubbling   = true;
+
+    /**
      * {@inheritDoc}
      */
     public function isHandling(/*# string */ $level)/*# : bool */
@@ -55,5 +71,37 @@ trait HandlerTrait
     public function getHandleLevelCode()/*# : int */
     {
         return $this->level_code;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function stopHandler(/*# bool */ $stop = true)
+    {
+        $this->stopped = $stop;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isHandlerStopped()/*# : bool */
+    {
+        return $this->stopped;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function stopBubbling(/*# bool */ $stop = true)
+    {
+        $this->bubbling = !$stop;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isBubblingStopped()/*# : bool */
+    {
+        return !$this->bubbling;
     }
 }
