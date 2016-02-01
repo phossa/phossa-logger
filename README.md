@@ -1,11 +1,19 @@
-# Introduction
+# phossa-logger
+[![Build Status](https://travis-ci.org/phossa/phossa-logger.svg?branch=master)](https://travis-ci.org/phossa/phossa-logger.svg?branch=master)
+[![HHVM Status](http://hhvm.h4cc.de/badge/phossa/phossa-logger.svg)](http://hhvm.h4cc.de/package/phossa/phossa-logger)
+[![Latest Stable Version](https://poser.pugx.org/phossa/phossa-logger/v/stable)](https://packagist.org/packages/phossa/phossa-logger)
+[![License](https://poser.pugx.org/phossa/phossa-logger/license)](https://packagist.org/packages/phossa/phossa-logger)
+
+Introduction
+---
 
 Phossa-logger is a PSR-3 compliant logging package. It is a rewrite of Monolog
 with some changes.
 
 More information about [PSR-3](http://www.php-fig.org/psr/psr-3/)
 
-# Installation
+Installation
+---
 
 Install via the `composer` utility.
 
@@ -23,7 +31,8 @@ or add the following lines to your `composer.json`
 }
 ```
 
-# Usage
+Usage
+---
 
 - The simplest usage
 
@@ -35,7 +44,8 @@ or add the following lines to your `composer.json`
     $logger->notice('a notice from {whom}', array('whom' => $cache));
     ```
 
-# Features
+Features
+---
 
 - Decorator: decorate log entry in some way
 
@@ -54,16 +64,19 @@ or add the following lines to your `composer.json`
 
 - PHP7 ready for return type declarations and argument type declarations.
 
-# Version
+Version
+---
 
 1.0.3
 
-# Dependencies
+Dependencies
+---
 
 - PHP >= 5.4.0
 - phossa/phossa-shared >= 1.0.3
 - psr/log
 
-# License
+License
+---
 
 [MIT License](http://spdx.org/licenses/MIT)
