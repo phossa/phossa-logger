@@ -13,6 +13,16 @@ Install via the `composer` utility.
 composer require "phossa/phossa-logger=1.*"
 ```
 
+or add the following lines to your `composer.json`
+
+```json
+{
+    "require": {
+       "phossa/phossa-logger": "^1.0.3"
+    }
+}
+```
+
 # Usage
 
 - The simplest usage
@@ -46,7 +56,7 @@ composer require "phossa/phossa-logger=1.*"
 
 # Version
 
-1.0.2
+1.0.3
 
 # Dependencies
 

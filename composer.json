@@ -1,6 +1,6 @@
 {
     "name": "phossa/phossa-logger",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": "MIT",
     "type": "library",
     "description": "The PSR-3 compliant PHP logging system.",
@@ -15,9 +15,12 @@
     "autoload": {
         "psr-0": { "Phossa\\Logger\\": "src/" }
     },
+    "autoload-dev": {
+        "psr-0": { "Phossa\\Logger\\": "tests/src/" }
+    },
     "require": {
         "php": ">=5.4.0",
-        "phossa/phossa-shared": "^1.0.3",
+        "phossa/phossa-shared": "^1.0.4",
         "psr/log": "*"
     },
     "archive": {
