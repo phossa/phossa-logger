@@ -26,7 +26,7 @@ or add the following lines to your `composer.json`
 ```json
 {
     "require": {
-       "phossa/phossa-logger": "^1.0.3"
+       "phossa/phossa-logger": "^1.0.5"
     }
 }
 ```
@@ -161,7 +161,7 @@ Features
 Version
 ---
 
-1.0.4
+1.0.5
 
 Dependencies
 ---

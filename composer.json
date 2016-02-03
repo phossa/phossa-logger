@@ -1,6 +1,6 @@
 {
     "name": "phossa/phossa-logger",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "license": "MIT",
     "type": "library",
     "description": "The PSR-3 compliant PHP logging system.",
