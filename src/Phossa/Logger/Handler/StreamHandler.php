@@ -67,7 +67,7 @@ class StreamHandler extends HandlerAbstract
 
         // file
         if (is_string($stream)) {
-            $_stream = null;
+            $strm = null;
 
             // file:// prefix ?
             if ('file://' === substr($stream, 0, 7)) {
@@ -76,16 +76,16 @@ class StreamHandler extends HandlerAbstract
                 if ($dirname && !is_dir($dirname)) {
                     @mkdir($dirname, 0777, true);
                 }
-                $_stream = @fopen($stream, 'a');
-                $close   = true;
+                $strm  = @fopen($stream, 'a');
+                $close = true;
 
             // php::// etc.
             } elseif (strpos($stream, '://') !== false) {
-                $_stream = @fopen($stream, 'a');
-                $close   = true;
+                $strm  = @fopen($stream, 'a');
+                $close = true;
             }
-            if (is_resource($_stream)) {
-                $stream = $_stream;
+            if (is_resource($strm)) {
+                $stream = $strm;
             }
         }
 

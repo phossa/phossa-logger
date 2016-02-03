@@ -192,9 +192,9 @@ class Logger extends AbstractLogger implements LoggerInterface
     public function addHandler(callable $handler)
     {
         if ($handler instanceof Handler\HandlerInterface) {
-            $c = $handler->getHandleLevelCode();
-            if ($c < $this->level_code) {
-                $this->level_code = $c;
+            $code = $handler->getHandleLevelCode();
+            if ($code < $this->level_code) {
+                $this->level_code = $code;
             }
         }
         $this->handlers[] = $handler;
@@ -287,7 +287,10 @@ class Logger extends AbstractLogger implements LoggerInterface
         // create logEntry
         if ($this->log_factory) {
             $log = call_user_func(
-                $this->log_factory, $level, $message, $context
+                $this->log_factory,
+                $level,
+                $message,
+                $context
             );
         } else {
             $log = new LogEntry($level, $message, $context);

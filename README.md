@@ -117,7 +117,7 @@ Features
     ```
 
 - Handler/Decorator/Formatter all enforce '__invoke()' in the their interface,
-  which makes them 'callable'.
+  which makes them `callable`.
 
 - User may use all sorts of callable as handler, decorator or formatter.
 
@@ -143,8 +143,16 @@ Features
     ]);
     ```
 
-- Created `LogEntryInterface` for log entry (or call it message). It is now
-  possible to extend `LogEntry` and use a factory closure to create log entry.
+- `LogEntryInterface` for log entry (or call it message). It is now possible to
+  extend `LogEntry` and use a factory closure to create log entry.
+
+    ```php
+    $logger = new Logger('MyLogger', [], [],
+        function ($level, $message, $context) {
+            return new MyLogEntry($level, $message, $context);
+        }
+    );
+    ```
 
 - Support PHP 5.4+, PHP 7.0+, HHVM
 

@@ -138,13 +138,16 @@ class BrowserHandler extends HandlerAbstract
     {
         $args = array(static::quote('font-weight: normal'));
         $format = '%c' . $formatted;
-        preg_match_all('/\[\[(.*?)\]\]\{([^}]*)\}/s', $format,
-            $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER
+        preg_match_all(
+            '/\[\[(.*?)\]\]\{([^}]*)\}/s',
+            $format,
+            $matches,
+            PREG_OFFSET_CAPTURE | PREG_SET_ORDER
         );
 
         foreach (array_reverse($matches) as $match) {
-            $args[] = static::quote(static::handleCustomStyles(
-                $match[2][0], $match[1][0])
+            $args[] = static::quote(
+                static::handleCustomStyles($match[2][0], $match[1][0])
             );
             $args[] = '"font-weight: normal"';
 
@@ -165,21 +168,23 @@ class BrowserHandler extends HandlerAbstract
         );
         static $labels = array();
 
-        return preg_replace_callback('/macro\s*:(.*?)(?:;|$)/',
-            function ($m) use ($string, &$colors, &$labels) {
-            if (trim($m[1]) === 'autolabel') {
-                // Format the string as a label with consistent
-                // auto assigned background color
-                if (!isset($labels[$string])) {
-                    $labels[$string] = $colors[count($labels) % count($colors)];
+        return preg_replace_callback(
+            '/macro\s*:(.*?)(?:;|$)/',
+            function ($mstr) use ($string, &$colors, &$labels) {
+                if (trim($mstr[1]) === 'autolabel') {
+                    // Format the string as a label with consistent
+                    // auto assigned background color
+                    if (!isset($labels[$string])) {
+                        $labels[$string] = $colors[count($labels) % count($colors)];
+                    }
+                    $color = $labels[$string];
+
+                    return "background-color: $color; color: white; border-radius: 3px; padding: 0 2px 0 2px";
                 }
-                $color = $labels[$string];
-
-                return "background-color: $color; color: white; border-radius: 3px; padding: 0 2px 0 2px";
-            }
-
-            return $m[1];
-        }, $style);
+                return $mstr[1];
+            },
+            $style
+        );
     }
 
     protected static function quote($arg)

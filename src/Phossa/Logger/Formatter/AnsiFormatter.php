@@ -155,11 +155,11 @@ class AnsiFormatter extends FormatterAbstract
         /*# string */ $text,
         array $definition
     )/*# : string */ {
-        $fg = $definition[0] ?: '';
-        $bg = $definition[1] ?: '';
-        $de = $definition[2] ?: '';
-        $prefix = $fg . $bg . $de;
-        $suffix = $prefix ? self::DECO_END : '';
+        $fgColor = $definition[0] ?: '';
+        $bgColor = $definition[1] ?: '';
+        $deColor = $definition[2] ?: '';
+        $prefix  = $fgColor . $bgColor . $deColor;
+        $suffix  = $prefix ? self::DECO_END : '';
         return $prefix . $text . $suffix;
     }
 }
