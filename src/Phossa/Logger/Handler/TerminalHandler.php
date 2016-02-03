@@ -46,7 +46,6 @@ class TerminalHandler extends StreamHandler
      * @param  string|resource $device the terminal device
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
-     * @return void
      * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right, $device not right
      * @access public

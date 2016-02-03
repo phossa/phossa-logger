@@ -96,7 +96,6 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @param  callable[] $handlers (optional) callable handler array
      * @param  callable[] $decorators (optional) callable decorator array
      * @param  callable $logFactory (optional) log factory callable
-     * @return void
      * @throws Exception\InvalidArgumentException
      * @access public
      * @api

@@ -66,7 +66,6 @@ class LogEntry implements LogEntryInterface
      * @param  string $level message level
      * @param  string $message message
      * @param  array $contexts (optional) message context
-     * @return void
      * @access public
      * @throws Exception\InvalidArgumentException if invalid level given
      * @api
@@ -129,7 +128,7 @@ class LogEntry implements LogEntryInterface
     public function setTimestamp(
         /*# : float */ $timestamp = 0
     )/*# : LogEntryInterface */ {
-        $this->timestamp = $timestamp ?: microtime(true);
+        $this->timestamp = (float) $timestamp ?: microtime(true);
         return $this;
     }
 

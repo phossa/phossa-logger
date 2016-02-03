@@ -33,7 +33,6 @@ abstract class FormatterAbstract implements FormatterInterface
      * Simple constructor
      *
      * @param  array $configs (optional) formatter config array
-     * @return void
      * @access public
      * @api
      */

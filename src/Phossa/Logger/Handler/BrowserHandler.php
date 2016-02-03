@@ -53,7 +53,6 @@ class BrowserHandler extends HandlerAbstract
      *
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
-     * @return void
      * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right
      * @access public
@@ -108,7 +107,7 @@ class BrowserHandler extends HandlerAbstract
             }
         }
 
-        if (static::$messages) {
+        if (count(static::$messages)) {
             if ($html) {
                 echo '<script>' , static::generateScript() , '</script>';
             } else {

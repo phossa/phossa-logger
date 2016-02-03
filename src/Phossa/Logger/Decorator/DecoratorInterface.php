@@ -38,7 +38,6 @@ interface DecoratorInterface
     /**
      * Stop this decorator, bypass this decorator
      *
-     * @param  bool $stop stop or not
      * @return void
      * @access public
      * @api

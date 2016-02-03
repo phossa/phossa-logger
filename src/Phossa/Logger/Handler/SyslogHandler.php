@@ -78,7 +78,6 @@ class SyslogHandler extends HandlerAbstract
      * @param  string $ident identification string
      * @param  string $level (optional) level string
      * @param  array $configs (optional) properties to set
-     * @return void
      * @see    \openlog()
      * @see    \syslog()
      * @throws Exception\InvalidArgumentException

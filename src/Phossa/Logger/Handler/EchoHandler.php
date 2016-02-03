@@ -38,7 +38,6 @@ class EchoHandler extends HandlerAbstract
      *
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
-     * @return void
      * @throws Exception\InvalidArgumentException
      *         if $level not right
      * @access public

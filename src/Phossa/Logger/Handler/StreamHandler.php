@@ -48,7 +48,6 @@ class StreamHandler extends HandlerAbstract
      * @param  string|resource $stream the stream
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
-     * @return void
      * @throws Exception\InvalidArgumentException
      *         if $level not right, $stream not right
      * @access public
@@ -73,11 +72,14 @@ class StreamHandler extends HandlerAbstract
             if ('file://' === substr($stream, 0, 7)) {
                 $stream  = substr($stream, 7);
                 $dirname = dirname($stream);
+                $fileok  = true;
                 if ($dirname && !is_dir($dirname)) {
-                    @mkdir($dirname, 0777, true);
+                    $fileok = @mkdir($dirname, 0777, true);
                 }
-                $strm  = @fopen($stream, 'a');
-                $close = true;
+                if ($fileok) {
+                    $strm  = @fopen($stream, 'a');
+                    $close = true;
+                }
 
             // php::// etc.
             } elseif (strpos($stream, '://') !== false) {
@@ -129,14 +131,15 @@ class StreamHandler extends HandlerAbstract
     /**
      * Close the stream on exit
      *
-     * @return void
+     * @return bool
      * @access public
      * @api
      */
     public function closeStream()
     {
-        if (is_resource($this->stream)) {
-            @fclose($this->stream);
+        if (!is_resource($this->stream) || @fclose($this->stream)) {
+            return true;
         }
+        return false;
     }
 }
