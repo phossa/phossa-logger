@@ -68,7 +68,9 @@ class TerminalHandler extends StreamHandler
         // set ansi color formatter
         if ($this->color) {
             $ansi = new AnsiFormatter();
-            if ($this->formatter) $ansi->setSlave($this->formatter);
+            if ($this->formatter) {
+                $ansi->setSlave($this->formatter);
+            }
             $this->setFormatter($ansi);
         }
 

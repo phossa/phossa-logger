@@ -73,16 +73,20 @@ class StreamHandler extends HandlerAbstract
             if ('file://' === substr($stream, 0, 7)) {
                 $stream  = substr($stream, 7);
                 $dirname = dirname($stream);
-                if ($dirname && !is_dir($dirname)) @mkdir($dirname, 0777, true);
+                if ($dirname && !is_dir($dirname)) {
+                    @mkdir($dirname, 0777, true);
+                }
                 $_stream = @fopen($stream, 'a');
                 $close   = true;
 
             // php::// etc.
-            } else if (strpos($stream, '://') !== false) {
+            } elseif (strpos($stream, '://') !== false) {
                 $_stream = @fopen($stream, 'a');
                 $close   = true;
             }
-            if (is_resource($_stream)) $stream = $_stream;
+            if (is_resource($_stream)) {
+                $stream = $_stream;
+            }
         }
 
         if (is_resource($stream)) {
@@ -119,7 +123,7 @@ class StreamHandler extends HandlerAbstract
         );
 
         // release lock
-        flock( $this->stream, LOCK_UN);
+        flock($this->stream, LOCK_UN);
     }
 
     /**

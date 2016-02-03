@@ -37,7 +37,9 @@ class InterpolateDecorator extends DecoratorAbstract
     public function __invoke(LogEntryInterface $log)
     {
         $msg = $log->getMessage();
-        if (strpos($msg, '{') === false) return;
+        if (strpos($msg, '{') === false) {
+            return;
+        }
 
         // build a replacement array with braces around the context keys
         $replace = [];

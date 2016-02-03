@@ -179,7 +179,7 @@ class BrowserHandler extends HandlerAbstract
             }
 
             return $m[1];
-        }, $style );
+        }, $style);
     }
 
     protected static function quote($arg)

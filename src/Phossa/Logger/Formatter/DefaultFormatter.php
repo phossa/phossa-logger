@@ -63,9 +63,11 @@ class DefaultFormatter extends FormatterAbstract
     protected function printContext(array $context)
     {
         $res = '';
-        foreach($context as $name => $val) {
+        foreach ($context as $name => $val) {
             // bypass internal context
-            if (substr($name, 0, 2) === '__') continue;
+            if (substr($name, 0, 2) === '__') {
+                continue;
+            }
 
             // concat contexts
             $res .= " $name: " . strval($val);

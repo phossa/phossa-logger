@@ -95,7 +95,8 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function getMessage()/*# : string */ {
+    public function getMessage()/*# : string */
+    {
         return $this->message;
     }
 
@@ -117,7 +118,8 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function getLevel()/*# : string */ {
+    public function getLevel()/*# : string */
+    {
         return $this->level;
     }
 
@@ -134,7 +136,8 @@ class LogEntry implements LogEntryInterface
     /**
      * {@inheritDoc}
      */
-    public function getTimestamp()/*# : float */ {
+    public function getTimestamp()/*# : float */
+    {
         return $this->timestamp;
     }
 

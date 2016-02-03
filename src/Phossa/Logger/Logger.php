@@ -120,7 +120,9 @@ class Logger extends AbstractLogger implements LoggerInterface
         $this->level_code = LogLevel::getLevelCode(LogLevel::WARNING);
 
         // log entry factory if any
-        if ($logFactory) $this->log_factory = $logFactory;
+        if ($logFactory) {
+            $this->log_factory = $logFactory;
+        }
     }
 
     /**
@@ -144,7 +146,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function isHandling(/*# string */ $level)/*# : bool */
     {
-        if (LogLevel::getLevelCode($level) < $this->level_code) return false;
+        if (LogLevel::getLevelCode($level) < $this->level_code) {
+            return false;
+        }
         return true;
     }
 
@@ -156,11 +160,13 @@ class Logger extends AbstractLogger implements LoggerInterface
         /*# bool */ $flush = true
     ) {
         // flush handlers first
-        if ($flush) $this->handlers = [];
+        if ($flush) {
+            $this->handlers = [];
+        }
 
         // add handlers one by one
         if (count($handlers)) {
-            foreach($handlers as $handler) {
+            foreach ($handlers as $handler) {
                 // is callable
                 if (!is_callable($handler)) {
                     throw new Exception\InvalidArgumentException(
@@ -187,7 +193,9 @@ class Logger extends AbstractLogger implements LoggerInterface
     {
         if ($handler instanceof Handler\HandlerInterface) {
             $c = $handler->getHandleLevelCode();
-            if ($c < $this->level_code) $this->level_code = $c;
+            if ($c < $this->level_code) {
+                $this->level_code = $c;
+            }
         }
         $this->handlers[] = $handler;
     }
@@ -208,11 +216,13 @@ class Logger extends AbstractLogger implements LoggerInterface
         /*# bool */ $flush = true
     ) {
         // flush decorators first
-        if ($flush) $this->decorators = [];
+        if ($flush) {
+            $this->decorators = [];
+        }
 
         // add decorators one by one
         if (count($decorators)) {
-            foreach($decorators as $deco) {
+            foreach ($decorators as $deco) {
                 if (!is_callable($deco)) {
                     throw new Exception\InvalidArgumentException(
                         Message::get(
@@ -267,7 +277,9 @@ class Logger extends AbstractLogger implements LoggerInterface
         }
 
         // handling this level ?
-        if (!$this->isHandling($level)) return;
+        if (!$this->isHandling($level)) {
+            return;
+        }
 
         // set channel context (reserved)
         $context['__CHANNEL__'] = $this->getChannel();
@@ -290,7 +302,7 @@ class Logger extends AbstractLogger implements LoggerInterface
         }
 
         // loop thru handlers
-        foreach($this->handlers as $handler) {
+        foreach ($this->handlers as $handler) {
             // handler instance
             if ($handler instanceof Handler\HandlerInterface) {
                 // call handler instance
@@ -300,7 +312,9 @@ class Logger extends AbstractLogger implements LoggerInterface
                 }
 
                 // logEntry bubbling stopped ?
-                if ($handler->isBubblingStopped()) break;
+                if ($handler->isBubblingStopped()) {
+                    break;
+                }
 
             // other callable
             } else {
