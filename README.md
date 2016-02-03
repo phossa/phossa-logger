@@ -47,27 +47,113 @@ Usage
 Features
 ---
 
-- Decorator: decorate log entry in some way
+- Decorator: used to modify the `$logEntry` in some way.
+
+  - Implements the `__invoke()` method, such that decorator is a callable
+
+    ```php
+    class InterpolateDecorator extends DecoratorAbstract
+    {
+        public function __invoke(LogEntryInterface $log)
+        {
+            ...
+        }
+    }
+    ```
+
+  - User defined functions can also be used as decorator
+
+    ```php
+    $logger->setDecorators([
+        new Decorator/InterpolateDecorator(),
+        function ($logEntry) {
+            ...
+        }
+    ]);
+    ```
+
+  - Decorator implements `DecoratorInterface` can be disabled
+
+    ```php
+    $inter = new Decorator/InterpolateDecorator();
+    $logger->setDecorators([ $inter ]);
+    ...
+
+    $inter->stopDecorator();
+    ```
+
+- Handler: distribute log entry to different devices. Multiple handlers can be
+  set at the same time.
+
+    ```php
+    // create a logger with channel 'MyLogger'
+    $logger  = new Logger('MyLogger');
+
+    // syslog handler with ident set to 'MyLogger'
+    $syslog  = new Handler\SyslogerHandler($logger->getChannel);
+
+    // console handler with output to stderr
+    $console = new Handler\TerminalHandler();
+
+    // add handlers
+    $logger->addHandler($syslog);
+    $logger->addHandler($console);
+
+    ...
+
+    // at some point, stop console logging
+    $console->stopHandler();
+    ```
+
+- Formatter: turn log entry object into string. Formatter is bound to a
+  specific handler.
+
+    ```php
+    // console handler with output to stderr
+    $console = new Handler\TerminalHandler();
+
+    // set AnsiFormatter
+    $console->setFormatter(new Formatter\AnsiFormatter());
+    ```
+
+- Handler/Decorator/Formatter all enforce '__invoke()' in the their interface,
+  which makes them 'callable'.
+
+- User may use all sorts of callable as handler, decorator or formatter.
+
+    ```php
+    // handler
+    $syslog = new SyslogHandler();
+
+    // set a anonymous function as a formatter
+    $syslog->setFormatter(
+        function ($log) {
+            ...
+            return $string;
+        }
+    );
+
+    // adding handlers
+    $logger->setHandlers([
+        $syslog,
+        function ($log) {
+            // convert $log to string and send to a log device
+            ...
+        }
+    ]);
+    ```
 
 - Created `LogEntryInterface` for log entry (or call it message). It is now
   possible to extend `LogEntry` and use a factory closure to create log entry.
 
-- Handler: distribute log entry to different devices
-
-- Formatter: turn log entry object into string
-
-- Handler/Decorator/Formatter all enforce '__invoke()' in the their interface,
-  which makes them 'callable'. Thus, user may use all sorts of callable as
-  handler, decorator or formatter.
-
-- Support PHP 5.4+
+- Support PHP 5.4+, PHP 7.0+, HHVM
 
 - PHP7 ready for return type declarations and argument type declarations.
 
 Version
 ---
 
-1.0.3
+1.0.4
 
 Dependencies
 ---

@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -17,13 +22,14 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * EchoHandler
  *
- * Echo the log message to STDOUT
+ * Echo/Print the log message to STDOUT
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\Handler\HandlerAbstract
- * @version 1.0.0
- * @since   1.0.0 added
+ * @version 1.0.4
+ * @since   1.0.1 added
+ * @since   1.0.4 added property $eol
  */
 class EchoHandler extends HandlerAbstract
 {
@@ -32,6 +38,7 @@ class EchoHandler extends HandlerAbstract
      *
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
+     * @return void
      * @throws Exception\InvalidArgumentException
      *         if $level not right
      * @access public
@@ -53,6 +60,6 @@ class EchoHandler extends HandlerAbstract
      */
     public function __invoke(LogEntryInterface $log)
     {
-        echo call_user_func($this->getFormatter(), $log);
+        echo call_user_func($this->getFormatter(), $log) . $this->eol;
     }
 }

@@ -29,12 +29,13 @@ class InterpolateDecoratorTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @covers Phossa\Logger\Decorator\InterpolateDecorator::stopDecorator
+     * @covers Phossa\Logger\Decorator\InterpolateDecorator::startDecorator
      */
     public function testStopDecorator()
     {
         $this->object->stopDecorator();
         $this->assertTrue($this->object->isDecoratorStopped());
-        $this->object->stopDecorator(false);
+        $this->object->startDecorator();
         $this->assertFalse($this->object->isDecoratorStopped());
     }
 

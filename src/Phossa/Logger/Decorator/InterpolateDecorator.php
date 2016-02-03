@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -15,10 +20,10 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * Interpolate placeholders in the message according to psr-3
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\Decorator\DecoratorTrait
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 __invoke() returns void now, extends DecoratorAbstract
  */
@@ -28,7 +33,6 @@ class InterpolateDecorator extends DecoratorAbstract
      * Replace any '{item}' in the messsage with context['item'] value
      *
      * @see     http://www.php-fig.org/psr/psr-3/
-     * Interpolates '{placeholder}' into text according to context array
      */
     public function __invoke(LogEntryInterface $log)
     {

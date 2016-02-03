@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -14,9 +19,9 @@ namespace Phossa\Logger;
  * LogEntryInterface
  *
  * @interface
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 removed stopCascading() etc.
  */
@@ -37,7 +42,6 @@ interface LogEntryInterface
     /**
      * Get the original message
      *
-     * @param  void
      * @return string
      * @access public
      * @api
@@ -61,7 +65,6 @@ interface LogEntryInterface
     /**
      * Get message level
      *
-     * @param  void
      * @return string
      * @access public
      * @see    \Phossa\Logger\LogLevel
@@ -85,7 +88,6 @@ interface LogEntryInterface
     /**
      * Get timestamp
      *
-     * @param  void
      * @return float
      * @access public
      * @api
@@ -105,7 +107,6 @@ interface LogEntryInterface
     /**
      * Get log context array
      *
-     * @param  void
      * @return array
      * @access public
      * @api
@@ -139,7 +140,6 @@ interface LogEntryInterface
     /**
      * To string
      *
-     * @param  void
      * @return string
      * @access public
      * @api

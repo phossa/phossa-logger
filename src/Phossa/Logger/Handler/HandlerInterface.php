@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -15,12 +20,29 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * HandlerInterface
  *
+ * <code>
+ *     $handler = new Handler();
+ *
+ *     // set formatter. if not set, use the DefaultFormatter
+ *     $handler->setFormatter(new Formatter\AnsiFormatter());
+ *
+ *     // handle the entry
+ *     $handler($logEntry);
+ *
+ *     // stop this handler
+ *     $handler->stopHandler();
+ *
+ *     // stop bubbling up the $logEntry
+ *     $handler->stopBubbling();
+ * </code>
+ *
  * @interface
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 __invoke() returns void now
+ * @since   1.0.4 added startHandler()/startBubbling()
  */
 interface HandlerInterface
 {
@@ -55,9 +77,7 @@ interface HandlerInterface
     /**
      * Get current handling level code in int
      *
-     * @param  void
      * @return int
-     * @throws void
      * @access public
      * @api
      */
@@ -66,17 +86,24 @@ interface HandlerInterface
     /**
      * Stop this handler, bypass this handler
      *
-     * @param  bool $stop stop or not
      * @return void
      * @access public
      * @api
      */
-    public function stopHandler(/*# bool */ $stop = true);
+    public function stopHandler();
+
+    /**
+     * Start/enable this handler
+     *
+     * @return void
+     * @access public
+     * @api
+     */
+    public function startHandler();
 
     /**
      * Is this handler stopped
      *
-     * @param  void
      * @return bool
      * @access public
      * @api
@@ -86,17 +113,24 @@ interface HandlerInterface
     /**
      * stop bubbling up
      *
-     * @param  bool $stop stop bubbling or not
      * @return void
      * @access public
      * @api
      */
-    public function stopBubbling(/*# bool */ $stop = true);
+    public function stopBubbling();
+
+    /**
+     * start/enable bubbling up
+     *
+     * @return void
+     * @access public
+     * @api
+     */
+    public function startBubbling();
 
     /**
      * Is bubbling stopped
      *
-     * @param  void
      * @return bool
      * @access public
      * @api

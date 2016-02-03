@@ -1,18 +1,21 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
 namespace Phossa\Logger\Handler;
 
 use Phossa\Logger\LogLevel;
-use Phossa\Logger\Exception;
-use Phossa\Logger\Message\Message;
 use Phossa\Logger\LogEntryInterface;
 use Phossa\Logger\Formatter\AnsiFormatter;
 
@@ -21,10 +24,10 @@ use Phossa\Logger\Formatter\AnsiFormatter;
  *
  * log to terminal or console
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\Handler\StreamHandler
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.1 added
  */
 class TerminalHandler extends StreamHandler
@@ -43,6 +46,7 @@ class TerminalHandler extends StreamHandler
      * @param  string|resource $device the terminal device
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
+     * @return void
      * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right, $device not right
      * @access public
@@ -53,20 +57,7 @@ class TerminalHandler extends StreamHandler
         /*# string */ $level  = LogLevel::NOTICE,
         array $configs = []
     ) {
-        // open terminal
-        $stream = @fopen($device, 'a');
-        if (!is_resource($stream)) {
-            throw new Exception\InvalidArgumentException(
-                Message::get(
-                    Message::INVALID_LOG_STREAM,
-                    $device
-                ),
-                Message::INVALID_LOG_STREAM
-            );
-        }
-
-        // parent constructor
-        parent::__construct($stream, $level, $configs);
+        parent::__construct($device, $level, $configs);
     }
 
     /**

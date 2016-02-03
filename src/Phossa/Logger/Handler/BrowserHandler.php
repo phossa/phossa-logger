@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -19,9 +24,9 @@ use Phossa\Logger\LogEntryInterface;
  * - Send log message to browser console.
  * - Modified from \Monolog\Handler\BrowserConsoleHandler
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.2
+ * @version 1.0.4
  * @since   1.0.1 added
  */
 class BrowserHandler extends HandlerAbstract
@@ -48,6 +53,7 @@ class BrowserHandler extends HandlerAbstract
      *
      * @param  string $level level string
      * @param  array $configs (optional) properties to set
+     * @return void
      * @throws \Phossa\Logger\Exception\InvalidArgumentException
      *         if $level not right
      * @access public
@@ -78,9 +84,8 @@ class BrowserHandler extends HandlerAbstract
     }
 
     /**
-     * flush the messages to browser
+     * flush the messages to browser by adding to HTML page
      *
-     * @param  void
      * @return void
      * @access public
      * @static

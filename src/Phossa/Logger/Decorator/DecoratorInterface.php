@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -15,16 +20,18 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * Log decorator
  *
- * Normally, a decorator is used to process the log, add context fields to the
- * log etc. Implementation has to make '__invoke()' concrete, thus the
- * decorator instance is a callable
+ * Normally, a decorator is used to process the log entry, add context fields
+ * to the log entry. Implementation has to make '__invoke()' concrete, thus
+ * the decorator instance is a callable
  *
  * @interface
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 __invoke() returns void now
+ * @since   1.0.2 added stopDecorator()/isDecoratorStopped()
+ * @since   1.0.4 added startDecorator()
  */
 interface DecoratorInterface
 {
@@ -36,12 +43,20 @@ interface DecoratorInterface
      * @access public
      * @api
      */
-    public function stopDecorator(/*# bool */ $stop = true);
+    public function stopDecorator();
+
+    /**
+     * Start or enable this decorator
+     *
+     * @return void
+     * @access public
+     * @api
+     */
+    public function startDecorator();
 
     /**
      * Is this decorator stopped
      *
-     * @param  void
      * @return bool
      * @access public
      * @api

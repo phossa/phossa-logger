@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -25,11 +30,11 @@ use Phossa\Logger\Message\Message;
  *     $logger->notice('send a notice');
  * </code>
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Psr\Log\AbstractLogger
  * @see     \Phossa\Logger\LoggerInterface
- * @version 1.0.2
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 added setChannel()/getChannel()
  */
@@ -78,10 +83,20 @@ class Logger extends AbstractLogger implements LoggerInterface
     /**
      * constructor
      *
+     * the $logFactory signature is the same as LogEntry
+     * <code>
+     *     $logger = new Logger('MyLogger', [], [],
+     *         function ($level, $message, $context) {
+     *             return new MyLogEntry($level, $message, $context);
+     *         }
+     *     );
+     * </code>
+     *
      * @param  string $channel the logger channel/id string
      * @param  callable[] $handlers (optional) callable handler array
      * @param  callable[] $decorators (optional) callable decorator array
      * @param  callable $logFactory (optional) log factory callable
+     * @return void
      * @throws Exception\InvalidArgumentException
      * @access public
      * @api
@@ -144,7 +159,7 @@ class Logger extends AbstractLogger implements LoggerInterface
         if ($flush) $this->handlers = [];
 
         // add handlers one by one
-        if ($handlers) {
+        if (count($handlers)) {
             foreach($handlers as $handler) {
                 // is callable
                 if (!is_callable($handler)) {
@@ -196,7 +211,7 @@ class Logger extends AbstractLogger implements LoggerInterface
         if ($flush) $this->decorators = [];
 
         // add decorators one by one
-        if ($decorators) {
+        if (count($decorators)) {
             foreach($decorators as $deco) {
                 if (!is_callable($deco)) {
                     throw new Exception\InvalidArgumentException(
@@ -284,7 +299,7 @@ class Logger extends AbstractLogger implements LoggerInterface
                     call_user_func($handler, $log);
                 }
 
-                // bubbling stopped
+                // logEntry bubbling stopped ?
                 if ($handler->isBubblingStopped()) break;
 
             // other callable

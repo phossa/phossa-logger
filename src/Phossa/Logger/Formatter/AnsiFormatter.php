@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -16,15 +21,21 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * AnsiFormatter
  *
- * Format with ANSI color
+ * Adding ANSI color to any formatter(slave) result
  *
- * @package \Phossa\Logger
+ * <code>
+ *     $ansiColor = new AnsiFormatter();
+ *     $ansiColor->setSlave(new DefaultFormatter());
+ * </code>
+ *
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.1 added
  */
 class AnsiFormatter extends FormatterAbstract
 {
+    // <editor-fold defaultstate="collapsed" desc="colors">
     /**
      * foreground color
      *
@@ -73,8 +84,8 @@ class AnsiFormatter extends FormatterAbstract
      *
      * format  [ fgColor, bgColor, textDeco ]
      *
+     * @var     array
      * @access  protected
-     * @type    array
      */
     protected $colors = array(
         LogLevel::DEBUG     => [ self::FGCOLOR_GRAY,  null, null ],
@@ -93,6 +104,8 @@ class AnsiFormatter extends FormatterAbstract
         ],
     );
 
+    // </editor-fold>
+
     /**
      * Slave formatter
      *
@@ -102,27 +115,7 @@ class AnsiFormatter extends FormatterAbstract
     protected $slave;
 
     /**
-     * add ansi color to text
-     *
-     * @param  string $text text to color
-     * @param  array $definition coloring definition
-     * @return string
-     * @access protected
-     */
-    protected function addColor(
-        /*# string */ $text,
-        array $definition
-    )/*# : string */ {
-        $fg = $definition[0] ?: '';
-        $bg = $definition[1] ?: '';
-        $de = $definition[2] ?: '';
-        $prefix = $fg . $bg . $de;
-        $suffix = $prefix ? self::DECO_END : '';
-        return $prefix . $text . $suffix;
-    }
-
-    /**
-     * Set slave
+     * Set slave formatter
      *
      * @param  FormatterInterface $formatter the normal formatter
      * @return void
@@ -148,5 +141,25 @@ class AnsiFormatter extends FormatterAbstract
             call_user_func($this->slave, $log),
             $this->colors[$log->getLevel()] // color definition
         );
+    }
+
+    /**
+     * add ansi color to text
+     *
+     * @param  string $text text to color
+     * @param  array $definition coloring definition
+     * @return string
+     * @access protected
+     */
+    protected function addColor(
+        /*# string */ $text,
+        array $definition
+    )/*# : string */ {
+        $fg = $definition[0] ?: '';
+        $bg = $definition[1] ?: '';
+        $de = $definition[2] ?: '';
+        $prefix = $fg . $bg . $de;
+        $suffix = $prefix ? self::DECO_END : '';
+        return $prefix . $text . $suffix;
     }
 }

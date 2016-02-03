@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -15,10 +20,10 @@ use Phossa\Logger\LogEntryInterface;
 /**
  * A very simple formatter implementing FormatterInterface
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\Formatter\FormatterAbstract
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 extends FormatterAbstract
  */
@@ -60,7 +65,7 @@ class DefaultFormatter extends FormatterAbstract
         $res = '';
         foreach($context as $name => $val) {
             // bypass internal context
-            if (substr($name,0,2) === '__') continue;
+            if (substr($name, 0, 2) === '__') continue;
 
             // concat contexts
             $res .= " $name: " . strval($val);

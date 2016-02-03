@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -13,10 +18,10 @@ namespace Phossa\Logger;
 /**
  * Log entry class
  *
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Logger\LogEntryInterface
- * @version 1.0.1
+ * @version 1.0.4
  * @since   1.0.0 added
  * @since   1.0.1 removed stopCascading() etc.
  */
@@ -61,6 +66,7 @@ class LogEntry implements LogEntryInterface
      * @param  string $level message level
      * @param  string $message message
      * @param  array $contexts (optional) message context
+     * @return void
      * @access public
      * @throws Exception\InvalidArgumentException if invalid level given
      * @api

@@ -1,23 +1,29 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Logger
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
 namespace Phossa\Logger\Decorator;
 
 /**
- * DecoratorTrait
+ * Implemented stopDecorator() and isDecoratorStopped()
  *
  * @trait
- * @package \Phossa\Logger
+ * @package Phossa\Logger
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
- * @since   1.0.0 added
+ * @version 1.0.4
+ * @since   1.0.2 added
+ * @since   1.0.4 added startDecorator()
  */
 trait DecoratorTrait
 {
@@ -27,14 +33,22 @@ trait DecoratorTrait
      * @var    bool
      * @access protected
      */
-    protected $stopped    = false;
+    protected $stopped = false;
 
     /**
      * {@inheritDoc}
      */
-    public function stopDecorator(/*# bool */ $stop = true)
+    public function stopDecorator()
     {
-        $this->stopped = $stop;
+        $this->stopped = true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function startDecorator()
+    {
+        $this->stopped = false;
     }
 
     /**
