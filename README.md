@@ -8,7 +8,7 @@ Introduction
 ---
 
 Phossa-logger is a PSR-3 compliant logging package. It is a rewrite of Monolog
-with some changes.
+with lots of changes.
 
 More information about [PSR-3](http://www.php-fig.org/psr/psr-3/)
 
@@ -34,14 +34,17 @@ or add the following lines to your `composer.json`
 Usage
 ---
 
-- The simplest usage
+- Simple usage
 
     ```php
-    // create the logger with id 'mylogger'
+    // logger with id 'mylogger'
     $logger = new \Phossa\Logger\Logger('mylogger');
 
-    // logger will set default syslog and interpolate decorator
-    $logger->notice('a notice from {whom}', array('whom' => $cache));
+    // a notice
+    $logger->notice('a notice from code');
+
+    // a warning
+    $logger->notice('a warning from code');
     ```
 
 Features
@@ -49,7 +52,7 @@ Features
 
 - Decorator: used to modify the `$logEntry` in some way.
 
-  - Implements the `__invoke()` method, such that decorator is a callable
+  - Implements the `__invoke()` method, makes decorator a callable
 
     ```php
     class InterpolateDecorator extends DecoratorAbstract
@@ -61,7 +64,7 @@ Features
     }
     ```
 
-  - User defined functions can also be used as decorator
+  - User-defined functions can also be used as decorator
 
     ```php
     $logger->setDecorators([
@@ -72,87 +75,87 @@ Features
     ]);
     ```
 
-  - Decorator implements `DecoratorInterface` can be disabled
+  - Decorator implements `DecoratorInterface` can be disabled at runtime
 
     ```php
     $inter = new Decorator/InterpolateDecorator();
-    $logger->setDecorators([ $inter ]);
+    $logger->addDecorator($inter);
     ...
 
+    // disble the InterpolateDecorator at runtime
     $inter->stopDecorator();
     ```
 
 - Handler: distribute log entry to different devices. Multiple handlers can be
   set at the same time.
 
-    ```php
-    // create a logger with channel 'MyLogger'
-    $logger  = new Logger('MyLogger');
+  ```php
+  // create a logger with channel 'MyLogger'
+  $logger  = new Logger('MyLogger');
 
-    // syslog handler with ident set to 'MyLogger'
-    $syslog  = new Handler\SyslogerHandler($logger->getChannel);
+  // syslog handler with ident set to 'MyLogger'
+  $syslog  = new Handler\SyslogerHandler($logger->getChannel());
 
-    // console handler with output to stderr
-    $console = new Handler\TerminalHandler();
+  // console handler with output to stderr
+  $console = new Handler\TerminalHandler();
 
-    // add handlers
-    $logger->addHandler($syslog);
-    $logger->addHandler($console);
+  // add handlers
+  $logger->addHandler($syslog);
+  $logger->addHandler($console);
 
-    ...
-
-    // at some point, stop console logging
-    $console->stopHandler();
-    ```
+  ...
+   // at some point, stop console logging
+  $console->stopHandler();
+  ```
 
 - Formatter: turn log entry object into string. Formatter is bound to a
   specific handler.
 
-    ```php
-    // console handler with output to stderr
-    $console = new Handler\TerminalHandler();
+  ```php
+  // console handler with output to stderr
+  $console = new Handler\TerminalHandler();
 
-    // set AnsiFormatter
-    $console->setFormatter(new Formatter\AnsiFormatter());
-    ```
+  // set AnsiFormatter
+  $console->setFormatter(new Formatter\AnsiFormatter());
+  ```
 
 - Handler/Decorator/Formatter all enforce '__invoke()' in the their interface,
-  which makes them `callable`.
+  which makes them callable.
 
 - User may use all sorts of callable as handler, decorator or formatter.
 
-    ```php
-    // handler
-    $syslog = new SyslogHandler();
+  ```php
+  // handler
+  $syslog = new SyslogHandler();
 
-    // set a anonymous function as a formatter
-    $syslog->setFormatter(
-        function ($log) {
-            ...
-            return $string;
-        }
-    );
+  // set a anonymous function as a formatter
+  $syslog->setFormatter(
+      function ($log) {
+          ...
+          return $string;
+      }
+  );
 
-    // adding handlers
-    $logger->setHandlers([
-        $syslog,
-        function ($log) {
-            // convert $log to string and send to a log device
-            ...
-        }
-    ]);
-    ```
+  // adding different handlers
+  $logger->setHandlers([
+      $syslog,
+      function ($log) {
+          // convert $log to string and send to a log device
+          ...
+      }
+  ]);
+  ```
 
 - `LogEntryInterface` for log entry (or call it message). It is now possible to
   extend `LogEntry` and use a factory closure to create log entry.
 
-    ```php
-    $logger = new Logger('MyLogger', [], [],
-        function ($level, $message, $context) {
-            return new MyLogEntry($level, $message, $context);
-        }
-    );
-    ```
+  ```php
+  $logger = new Logger('MyLogger', [], [],
+      function ($level, $message, $context) {
+          return new MyLogEntry($level, $message, $context);
+      }
+  );
+  ```
 
 - Support PHP 5.4+, PHP 7.0+, HHVM
 
