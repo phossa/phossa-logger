@@ -44,7 +44,7 @@ Usage
     $logger->notice('a notice from code');
 
     // a warning
-    $logger->notice('a warning from code');
+    $logger->warning('a warning from code');
     ```
 
 Features
@@ -108,7 +108,7 @@ Features
   $console->stopHandler();
   ```
 
-- Formatter: turn log entry object into string. Formatter is bound to a
+- Formatter: turn log entry object into string. A formatter is bound to a
   specific handler.
 
   ```php
@@ -160,6 +160,8 @@ Features
 - Support PHP 5.4+, PHP 7.0+, HHVM
 
 - PHP7 ready for return type declarations and argument type declarations.
+
+- PSR-1, PSR-2, PSR-3, PSR-4 compliant.
 
 Version
 ---
