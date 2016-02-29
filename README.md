@@ -7,7 +7,7 @@
 Introduction
 ---
 
-Phossa-logger is a PSR-3 compliant logging package. It is a rewrite of Monolog
+Phossa-logger is a PSR-3 compliant logging library. It is a rewrite of Monolog
 with lots of changes.
 
 More information about [PSR-3](http://www.php-fig.org/psr/psr-3/)
@@ -59,7 +59,7 @@ Features
     {
         public function __invoke(LogEntryInterface $log)
         {
-            ...
+            // ...
         }
     }
     ```
@@ -70,7 +70,7 @@ Features
     $logger->setDecorators([
         new Decorator/InterpolateDecorator(),
         function ($logEntry) {
-            ...
+            // ...
         }
     ]);
     ```
@@ -80,7 +80,7 @@ Features
     ```php
     $inter = new Decorator/InterpolateDecorator();
     $logger->addDecorator($inter);
-    ...
+    // ...
 
     // disble the InterpolateDecorator at runtime
     $inter->stopDecorator();
@@ -103,7 +103,7 @@ Features
   $logger->addHandler($syslog);
   $logger->addHandler($console);
 
-  ...
+  // ...
    // at some point, stop console logging
   $console->stopHandler();
   ```
@@ -131,7 +131,7 @@ Features
   // set a anonymous function as a formatter
   $syslog->setFormatter(
       function ($log) {
-          ...
+          // ...
           return $string;
       }
   );
@@ -141,7 +141,7 @@ Features
       $syslog,
       function ($log) {
           // convert $log to string and send to a log device
-          ...
+          // ...
       }
   ]);
   ```

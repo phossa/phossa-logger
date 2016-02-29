@@ -3,7 +3,7 @@
     "version": "1.0.5",
     "license": "MIT",
     "type": "library",
-    "description": "The PSR-3 compliant PHP logging system.",
+    "description": "The PSR-3 compliant PHP logging library.",
     "keywords": ["psr", "psr-3", "logging", "phossa", "framework"],
     "homepage": "https://github.com/phossa/phossa-logger",
     "authors": [

@@ -68,24 +68,29 @@ class StreamHandler extends HandlerAbstract
         if (is_string($stream)) {
             $strm = null;
 
-            // file:// prefix ?
+            // remove file:// prefix if any
             if ('file://' === substr($stream, 0, 7)) {
-                $stream  = substr($stream, 7);
+                $stream = substr($stream, 7);
+            }
+
+            if (strpos($stream, '://') !== false) {
+                // not file
+                $strm  = @fopen($stream, 'a');
+                $close = true;
+
+            } else {
+                // file & dir
                 $dirname = dirname($stream);
-                $fileok  = true;
+                $dirok   = true;
                 if ($dirname && !is_dir($dirname)) {
-                    $fileok = @mkdir($dirname, 0777, true);
+                    $dirok = @mkdir($dirname, 0777, true);
                 }
-                if ($fileok) {
+                if ($dirok) {
                     $strm  = @fopen($stream, 'a');
                     $close = true;
                 }
-
-            // php::// etc.
-            } elseif (strpos($stream, '://') !== false) {
-                $strm  = @fopen($stream, 'a');
-                $close = true;
             }
+
             if (is_resource($strm)) {
                 $stream = $strm;
             }
