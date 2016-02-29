@@ -77,7 +77,6 @@ class StreamHandler extends HandlerAbstract
                 // not file
                 $strm  = @fopen($stream, 'a');
                 $close = true;
-
             } else {
                 // file & dir
                 $dirname = dirname($stream);
