@@ -173,4 +173,4 @@ Dependencies
 License
 ---
 
-[MIT License](http://spdx.org/licenses/MIT)
+[MIT License](http://mit-license.org/)
