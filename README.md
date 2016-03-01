@@ -163,11 +163,6 @@ Features
 
 - PSR-1, PSR-2, PSR-3, PSR-4 compliant.
 
-Version
----
-
-1.0.5
-
 Dependencies
 ---
 
