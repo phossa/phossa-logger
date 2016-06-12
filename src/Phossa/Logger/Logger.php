@@ -109,14 +109,14 @@ class Logger extends AbstractLogger implements LoggerInterface
         // set channel/id
         $this->setChannel($channel);
 
+        // set default minimum level
+        $this->level_code = LogLevel::getLevelCode(LogLevel::WARNING);
+
         // set decorators
         $this->setDecorators($decorators);
 
         // set handlers
         $this->setHandlers($handlers);
-
-        // set default minimum level
-        $this->level_code = LogLevel::getLevelCode(LogLevel::WARNING);
 
         // log entry factory if any
         if ($logFactory) {
