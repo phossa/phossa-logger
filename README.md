@@ -1,8 +1,9 @@
-# phossa-logger
+# phossa-logger [ABANDONED]
 [![Build Status](https://travis-ci.org/phossa/phossa-logger.svg?branch=master)](https://travis-ci.org/phossa/phossa-logger.svg?branch=master)
-[![HHVM Status](http://hhvm.h4cc.de/badge/phossa/phossa-logger.svg)](http://hhvm.h4cc.de/package/phossa/phossa-logger)
 [![Latest Stable Version](https://poser.pugx.org/phossa/phossa-logger/v/stable)](https://packagist.org/packages/phossa/phossa-logger)
 [![License](https://poser.pugx.org/phossa/phossa-logger/license)](https://packagist.org/packages/phossa/phossa-logger)
+
+**See new lib at [phoole/logger](https://github.com/phoole/logger)**
 
 Introduction
 ---
